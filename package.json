@@ -1,0 +1,28 @@
+{
+  "name": "vidyut-solar-electricals",
+  "version": "1.0.0",
+  "description": "Lead generation website for Vidyut Solar and Electricals",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "migrate:local-data": "node scripts/migrate-local-data.js"
+  },
+  "keywords": [
+    "solar panel installation in nashik",
+    "best solar service in nashik",
+    "solar rooftop nashik"
+  ],
+  "author": "Vidyut Solar and Electricals",
+  "license": "MIT",
+  "dependencies": {
+    "cloudinary": "^1.41.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.1",
+    "express": "^4.21.2",
+    "mongoose": "^9.4.1",
+    "multer": "^2.1.1",
+    "multer-storage-cloudinary": "^4.0.0",
+    "nodemailer": "^8.0.4"
+  }
+}

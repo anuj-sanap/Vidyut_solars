@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Owner Project Upload | Vidyut Solar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800">
+    <main class="mx-auto max-w-3xl px-4 py-12 md:px-6">
+      <section class="rounded-2xl bg-white p-6 shadow">
+        <h1 class="text-2xl font-extrabold text-slate-900">Owner Project Upload</h1>
+        <p class="mt-2 text-sm text-slate-600">Add previous work images and location. This page is for owner use only.</p>
+        <p class="mt-1 text-xs text-slate-500">Tip: Enter exact owner key from `.env` and keep each image under 25MB.</p>
+
+        <form id="ownerProjectForm" class="mt-6 grid gap-4">
+          <label class="text-sm font-medium text-slate-700" for="ownerKey">Owner Key</label>
+          <input id="ownerKey" name="ownerKey" type="password" required class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+
+          <label class="text-sm font-medium text-slate-700" for="title">Project Title</label>
+          <input id="title" name="title" type="text" required placeholder="Ex: 10kW Residential Rooftop" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+
+          <label class="text-sm font-medium text-slate-700" for="location">Location</label>
+          <input id="location" name="location" type="text" required placeholder="Ex: Nashik, Maharashtra" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+
+          <label class="text-sm font-medium text-slate-700" for="description">Short Description (optional)</label>
+          <textarea id="description" name="description" rows="3" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" placeholder="Ex: On-grid system with net metering support"></textarea>
+
+          <label class="text-sm font-medium text-slate-700" for="projectImages">Project Images</label>
+          <input id="projectImages" name="projectImages" type="file" multiple accept="image/*" required class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+
+          <button type="submit" class="rounded-md bg-blue-700 px-4 py-3 text-sm font-bold text-white hover:bg-blue-800">Upload Project</button>
+          <p id="ownerStatus" class="text-sm"></p>
+        </form>
+      </section>
+
+      <section class="mt-8 rounded-2xl bg-white p-6 shadow">
+        <h2 class="text-xl font-bold text-slate-900">Manage Existing Projects</h2>
+        <p class="mt-2 text-sm text-slate-600">Edit title/location/description, add more images, or delete a project.</p>
+        <div id="ownerProjectsList" class="mt-5 grid gap-4"></div>
+      </section>
+    </main>
+    <script src="/js/owner-projects.js?v=3"></script>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+Vidyut Solar - Remaining Work Checklist
+=======================================
+
+1) Ensure local server is running with latest code
+--------------------------------------------------
+- Stop old process on port 3000 if needed:
+  taskkill /PID <PID> /F
+- Start server:
+  npm start
+- Verify local health:
+  http://localhost:3000/api/health
+- Expected keys in health response:
+  ok, service, database, uploads
+
+2) Verify MongoDB Atlas setup
+-----------------------------
+- Atlas cluster is created (M0 free tier is fine).
+- Database user exists with read/write access.
+- Network access allows your environment (0.0.0.0/0 for initial setup).
+- MONGODB_URI in .env is correct and password special characters are URL-encoded.
+
+3) Verify Cloudinary setup
+--------------------------
+- .env has:
+  CLOUDINARY_CLOUD_NAME
+  CLOUDINARY_API_KEY
+  CLOUDINARY_API_SECRET
+  CLOUDINARY_URL
+- Test upload from owner panel and ensure image URL is cloud URL (not local /uploads).
+
+4) Migrate old local JSON data to MongoDB (one-time)
+----------------------------------------------------
+- Run:
+  npm run migrate:local-data
+- Confirm output shows migration complete.
+
+5) Push project to GitHub
+-------------------------
+- Initialize repo if needed:
+  git init
+- Add files:
+  git add .
+- Commit:
+  git commit -m "prepare production migration with MongoDB and Cloudinary"
+- Create GitHub repo and push:
+  git remote add origin <your-repo-url>
+  git branch -M main
+  git push -u origin main
+
+6) Deploy on Render (Blueprint)
+-------------------------------
+- In Render: New + -> Blueprint.
+- Connect GitHub repo.
+- Render detects render.yaml automatically.
+- Fill all required environment variables in Render:
+  MONGODB_URI
+  CLOUDINARY_CLOUD_NAME
+  CLOUDINARY_API_KEY
+  CLOUDINARY_API_SECRET
+  OWNER_PANEL_KEY
+  SMTP_HOST
+  SMTP_PORT
+  SMTP_SECURE
+  SMTP_USER
+  SMTP_PASS
+  ALERT_FROM_EMAIL
+- Create service and wait for deployment.
+
+7) Verify production deployment
+-------------------------------
+- Open:
+  https://<your-render-url>/api/health
+- Expected:
+  ok = true
+  database = connected
+  uploads = cloudinary
+- Test:
+  - Owner project upload (add images)
+  - Public projects page (images visible)
+  - Edit/delete project from owner panel
+
+8) Connect domain
+-----------------
+- In Render service -> Settings -> Custom Domains:
+  add root domain and www.
+- Copy DNS records shown by Render.
+- Add records in domain provider panel (GoDaddy/Namecheap/etc).
+- Wait for DNS propagation.
+- Confirm HTTPS is active.
+
+9) Final security and cleanup
+-----------------------------
+- Rotate Cloudinary API secret (recommended because secret was shared in chat).
+- Replace placeholder SMTP credentials with real values.
+- Keep .env private (never commit .env).
+- Tighten MongoDB Network Access from 0.0.0.0/0 to trusted IPs when stable.
+
+10) Optional but recommended before handover
+--------------------------------------------
+- Add a custom 404 page.
+- Add basic request logging.
+- Add daily backup/monitoring plan for MongoDB and Cloudinary usage.
+- Create a short owner guide:
+  - How to upload projects
+  - How to edit/delete projects
+  - Where to check contact leads
+

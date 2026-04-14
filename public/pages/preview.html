@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Solar Preview | Vidyut Solar and Electricals</title>
+    <meta name="description" content="Preview your rooftop solar panel layout before installation using our 3D solar preview tool." />
+    <meta name="keywords" content="3D solar preview, rooftop solar layout tool, panel placement preview" />
+    <link rel="canonical" href="https://vidyutsolar.in/pages/preview.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="3D Solar Preview | Vidyut Solar and Electricals" />
+    <meta property="og:description" content="Upload your roof image and visualize a panel layout before final installation planning." />
+    <meta property="og:url" content="https://vidyutsolar.in/pages/preview.html" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?auto=format&fit=crop&w=1200&q=80" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="3D Solar Preview | Vidyut Solar and Electricals" />
+    <meta name="twitter:description" content="Interactively preview panel placement on your rooftop image before a site survey." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body data-page="preview" class="bg-slate-50 text-slate-800">
+    <div id="navbar-root"></div>
+
+    <main class="mx-auto max-w-7xl px-4 py-14 md:px-6">
+      <h1 class="text-3xl font-extrabold text-slate-900 md:text-4xl">Preview Your Solar Installation</h1>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate-700">View an interactive panel layout preview before installation. This preview is for visualization only and final placement is confirmed by site survey.</p>
+
+      <section class="mt-8 grid gap-8 md:grid-cols-2">
+        <div class="rounded-2xl bg-white p-6 shadow-sm">
+          <h2 class="text-xl font-bold">Layout Controls</h2>
+          <div class="mt-4 grid gap-4">
+            <p class="text-xs text-slate-600">Use controls below to adjust panel placement on live camera view.</p>
+
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <button id="startRealtime3d" type="button" class="w-full rounded-md bg-emerald-600 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-700 sm:w-auto">Start Camera + 3D</button>
+              <button id="stopRealtime3d" type="button" class="w-full rounded-md bg-slate-200 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-slate-300 sm:w-auto">Stop</button>
+            </div>
+            <p id="previewNote" class="text-xs text-slate-600">Click start to begin realtime preview.</p>
+            <div id="cameraHelp" class="rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 hidden"></div>
+            <pre id="cameraDiagnostics" class="hidden whitespace-pre-wrap rounded-md bg-slate-900 p-3 text-[11px] text-emerald-200"></pre>
+
+            <label class="text-sm font-semibold" for="previewSystemSize">System Size</label>
+            <select id="previewSystemSize" class="rounded-md border border-slate-300 px-3 py-2 text-sm">
+              <option value="10">10 kW</option>
+              <option value="9">9 kW</option>
+              <option value="8">8 kW</option>
+              <option value="7">7 kW</option>
+              <option value="6">6 kW</option>
+              <option value="5">5 kW</option>
+              <option value="4">4 kW</option>
+              <option value="3">3 kW</option>
+              <option value="2">2 kW</option>
+              <option value="1" selected>1 kW</option>
+            </select>
+
+            <label class="text-sm font-semibold" for="panelX">Panel Position X</label>
+            <input id="panelX" type="range" min="-2" max="2" value="0" step="0.1" />
+
+            <label class="text-sm font-semibold" for="panelZ">Panel Position Z</label>
+            <input id="panelZ" type="range" min="-2" max="2" value="0" step="0.1" />
+
+            <label class="text-sm font-semibold" for="panelRotate">Panel Rotation</label>
+            <input id="panelRotate" type="range" min="-45" max="45" value="0" step="1" />
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-white p-4 shadow-sm">
+          <h2 class="text-xl font-bold text-slate-900">3D Preview Canvas</h2>
+          <p class="mt-2 text-xs text-slate-600">Rotate and zoom using touch or mouse controls.</p>
+          <div id="canvasWrap" class="relative mt-4 h-[300px] overflow-hidden rounded-lg bg-slate-900 sm:h-[360px] md:h-[420px]">
+            <video id="previewVideo" autoplay playsinline muted class="absolute inset-0 h-full w-full object-cover"></video>
+            <canvas id="previewCanvas" class="absolute inset-0 h-full w-full"></canvas>
+          </div>
+          <div id="fallbackPreview" class="mt-4 hidden">
+            <img
+              class="h-[300px] w-full rounded-lg object-cover sm:h-[360px] md:h-[420px]"
+              src="https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?auto=format&fit=crop&w=1100&q=80"
+              alt="Static rooftop solar preview fallback"
+            />
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer-root"></div>
+    <div id="whatsapp-root"></div>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.166.1/examples/js/controls/OrbitControls.js"></script>
+    <script src="/js/preview.js"></script>
+  </body>
+</html>

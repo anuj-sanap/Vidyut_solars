@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solar Calculator | Vidyut Solar and Electricals</title>
+    <meta name="description" content="Estimate system size, cost, savings and payback with our solar calculator for Nashik properties." />
+    <meta name="keywords" content="Solar calculator Nashik, rooftop solar cost estimate, solar payback calculator" />
+    <link rel="canonical" href="https://vidyutsolar.in/pages/calculator.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Solar Calculator | Vidyut Solar and Electricals" />
+    <meta property="og:description" content="Estimate system size, installation cost, monthly savings and payback instantly." />
+    <meta property="og:url" content="https://vidyutsolar.in/pages/calculator.html" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1800&q=80" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Solar Calculator | Vidyut Solar and Electricals" />
+    <meta name="twitter:description" content="Use your bill and plot size to get a fast, indicative rooftop solar estimate for Nashik." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body data-page="calculator" class="bg-slate-50 text-slate-800">
+    <div id="navbar-root"></div>
+
+    <main class="mx-auto max-w-7xl px-4 py-14 md:px-6">
+      <h1 class="text-3xl font-extrabold text-slate-900 md:text-4xl">Solar Calculator</h1>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate-700">Get an instant estimate for solar panel installation in Nashik. Results are indicative and our team confirms final sizing after site visit.</p>
+
+      <section class="mt-8 grid gap-8 md:grid-cols-2">
+        <div class="rounded-2xl bg-white p-6 shadow-sm">
+          <h2 class="text-xl font-bold">Enter Your Details</h2>
+          <p class="mt-2 text-xs text-slate-600">Use monthly bill and available space to match the nearest fixed solar plan.</p>
+          <form id="solarCalculatorForm" class="mt-4 grid gap-4">
+            <label class="text-sm font-medium text-slate-700" for="calc-plot">Plot Size (sq ft)</label>
+            <input id="calc-plot" name="plotSize" type="number" min="70" required placeholder="Plot Size (sq.ft)" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+            <label class="text-sm font-medium text-slate-700" for="calc-bill">Monthly Electricity Bill (Rs)</label>
+            <input id="calc-bill" name="bill" type="number" min="450" required placeholder="Monthly Electricity Bill (Rs)" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+            <label class="text-sm font-medium text-slate-700" for="calc-system-size">Select System Size (Optional)</label>
+            <select id="calc-system-size" name="systemSize" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm">
+              <option value="">Auto match from bill + jaga</option>
+              <option value="10">10 kW</option>
+              <option value="9">9 kW</option>
+              <option value="8">8 kW</option>
+              <option value="7">7 kW</option>
+              <option value="6">6 kW</option>
+              <option value="5">5 kW</option>
+              <option value="4">4 kW</option>
+              <option value="3">3 kW</option>
+              <option value="2">2 kW</option>
+              <option value="1">1 kW</option>
+            </select>
+            <button type="submit" class="rounded-md bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700">Calculate</button>
+            <p id="calcFormStatus" class="text-sm text-red-600" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div id="calcResults" class="hidden rounded-2xl bg-white p-6 shadow-sm">
+          <div class="mb-3 inline-block rounded-full bg-yellow-100 px-3 py-1 text-xs font-bold text-yellow-800" id="recommendedBadge">Recommended system</div>
+          <h2 class="text-xl font-bold text-slate-900">Your Estimated Results</h2>
+          <div class="mt-4 grid gap-3 text-sm">
+            <div class="rounded-md bg-slate-100 p-3"><strong>Recommended System Size:</strong> <span id="resultSystemSize"></span></div>
+            <div class="rounded-md bg-slate-100 p-3"><strong>Monthly Units:</strong> <span id="resultMonthlyUnits"></span></div>
+            <div class="rounded-md bg-slate-100 p-3"><strong>Bill Without Solar:</strong> <span id="resultBillWithoutSolar"></span></div>
+            <div class="rounded-md bg-slate-100 p-3"><strong>Jaga (Space):</strong> <span id="resultJaga"></span></div>
+            <div class="rounded-md bg-slate-100 p-3"><strong>Estimate Cost:</strong> <span id="resultCost"></span></div>
+            <div class="rounded-md bg-slate-100 p-3"><strong>Monthly Saving:</strong> <span id="resultSavings"></span></div>
+          </div>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a id="whatsappWithResults" target="_blank" rel="noopener" href="https://wa.me/917558200928?text=Hi%20Vidyut%20Solar%2C%20I%20want%20a%20solar%20installation%20quote%20in%20Nashik" class="rounded-md bg-emerald-500 px-4 py-3 text-sm font-bold text-white">WhatsApp with Results</a>
+            <a href="/contact.html" class="rounded-md bg-yellow-400 px-4 py-3 text-sm font-bold text-slate-900">Get Quote</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <div id="footer-root"></div>
+    <div id="whatsapp-root"></div>
+    <script src="/js/main.js"></script>
+    <script src="/js/calculator.js"></script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1776106930608,
+    "createdAt": "2026-04-13T19:02:10.609Z",
+    "title": "project 1",
+    "location": "nashik road",
+    "description": "on grid",
+    "imagePaths": [
+      "/uploads/1776106930564-logo.png",
+      "/uploads/1776106930571-midlogo.png",
+      "/uploads/1776106930576-offgrid.png"
+    ]
+  },
+  {
+    "id": 1776105557570,
+    "createdAt": "2026-04-13T18:39:17.570Z",
+    "title": "Test Project",
+    "location": "Nashik",
+    "description": "Uploaded from node test",
+    "imagePaths": [
+      "/uploads/1776105557558-logo.png"
+    ]
+  }
+]
