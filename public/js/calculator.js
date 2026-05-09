@@ -162,7 +162,7 @@ function updateResultUI(data) {
 
   const waBtn = document.querySelector("#whatsappWithResults");
   const msg = [
-    "Hi Vidyut Solar, I used your calculator.",
+    "Hi Vidyut PowerTech, I used your calculator.",
     `Plot Size: ${data.plotSize} sq.ft`,
     `Monthly Bill: Rs ${data.bill}`,
     `Recommended System: ${data.systemSize} kW`,

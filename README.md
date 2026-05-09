@@ -1,4 +1,4 @@
-# Vidyut Solar and Electricals Website
+# Vidyut PowerTech Website
 
 Responsive lead-generation website for solar panel installation and sales in Nashik.
 

@@ -100,7 +100,7 @@ function cleanupOldVisits() {
 async function sendVisitorEmail({ page, ip, userAgent, visitId }) {
   if (!transporter) return { sent: false, reason: "email-not-configured" };
 
-  const subject = "New visitor on Vidyut Solar website";
+  const subject = "New visitor on Vidyut PowerTech website";
   const text = [
     "A new visitor has opened the website.",
     "",
@@ -438,7 +438,7 @@ app.use((error, _, res, next) => {
 app.get("/api/health", (_, res) => {
   res.json({
     ok: true,
-    service: "Vidyut Solar lead system",
+    service: "Vidyut PowerTech lead system",
     database: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
     uploads: hasCloudinaryConfig ? "cloudinary" : "local",
   });

@@ -1,4 +1,4 @@
-Vidyut Solar - Remaining Work Checklist
+Vidyut PowerTech - Remaining Work Checklist
 =======================================
 
 1) Ensure local server is running with latest code
