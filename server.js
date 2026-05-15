@@ -614,6 +614,21 @@ app.post("/api/auth/login", authRateLimit, async (req, res) => {
   try {
     const email = normalizeEmail(req.body?.email);
     const password = String(req.body?.password || "");
+
+    if (adminEmail && adminPassword && email === adminEmail && password === adminPassword) {
+      const passwordHash = await bcrypt.hash(password, 12);
+      const adminUser = await User.findOneAndUpdate(
+        { email },
+        { $set: { name: "Admin", email, passwordHash, role: "admin" } },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
+      );
+      return res.json({
+        success: true,
+        user: publicUser(adminUser),
+        token: signAuthToken(adminUser),
+      });
+    }
+
     const user = await User.findOne({ email });
 
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {

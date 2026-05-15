@@ -5,7 +5,8 @@ function nextUrl() {
 }
 
 function isAdminMode() {
-  return new URLSearchParams(window.location.search).get("mode") === "admin";
+  const params = new URLSearchParams(window.location.search);
+  return params.get("mode") === "admin" || params.get("next") === "/owner-projects.html";
 }
 
 async function parseAuthResponse(res) {
