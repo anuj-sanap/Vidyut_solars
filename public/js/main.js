@@ -39,6 +39,48 @@ function setYear() {
   if (year) year.textContent = new Date().getFullYear();
 }
 
+function setupAuthNav() {
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem("vidyutAuthUser") || "null");
+  } catch (_) {
+    user = null;
+  }
+
+  const authLinks = [document.querySelector("#authNavLink"), document.querySelector("#mobileAuthNavLink")].filter(Boolean);
+  const logoutButtons = [document.querySelector("#logoutBtn"), document.querySelector("#mobileLogoutBtn")].filter(Boolean);
+  const ownerProjectLinks = [
+    document.querySelector("#ownerProjectsNavLink"),
+    document.querySelector("#mobileOwnerProjectsNavLink"),
+  ].filter(Boolean);
+
+  ownerProjectLinks.forEach((link) => {
+    link.classList.toggle("hidden", user?.role !== "admin");
+  });
+
+  authLinks.forEach((link) => {
+    if (!user) {
+      link.textContent = "Login";
+      link.href = "/auth.html";
+      link.classList.remove("hidden");
+      return;
+    }
+
+    link.textContent = user.name || "Account";
+    link.href = user.role === "admin" ? "/owner-projects.html" : "/pages/calculator.html";
+    link.classList.remove("hidden");
+  });
+
+  logoutButtons.forEach((button) => {
+    button.classList.toggle("hidden", !user);
+    button.addEventListener("click", () => {
+      localStorage.removeItem("vidyutAuthToken");
+      localStorage.removeItem("vidyutAuthUser");
+      window.location.href = "/index.html";
+    });
+  });
+}
+
 async function notifyVisit() {
   try {
     const pathname = window.location.pathname || "/";
@@ -72,6 +114,7 @@ async function bootLayout() {
   await loadComponent("#whatsapp-root", "/components/whatsapp-float.html");
   setupMenu();
   highlightActiveNav();
+  setupAuthNav();
   setYear();
   notifyVisit();
 }

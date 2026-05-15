@@ -34,7 +34,7 @@
         <div class="mx-auto max-w-4xl">
           <div class="mx-auto mb-2 h-44 w-44 rounded-full border-4 border-blue-300 bg-white shadow-2xl flex items-center justify-center overflow-hidden">
             <img
-              src="/logo.png"
+              src="/assets/images/brand/logo.png"
               alt="Vidyut PowerTech"
               class="h-full w-full object-contain scale-110"
             />
@@ -119,9 +119,9 @@
           <a href="/projects.html" class="text-sm font-semibold text-emerald-700">Open gallery →</a>
         </div>
         <div class="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-          <img class="h-52 w-full rounded-xl object-cover shadow" src="/media/img1.jpeg" alt="img1" />
-          <img class="h-52 w-full rounded-xl object-cover shadow" src="/media/img2.jpeg" alt="img2" />
-          <img class="h-52 w-full rounded-xl object-cover shadow" src="/media/img3.jpeg" alt="img3" />
+          <img class="h-52 w-full rounded-xl object-cover shadow" src="/assets/images/hero/img1.jpeg" alt="img1" />
+          <img class="h-52 w-full rounded-xl object-cover shadow" src="/assets/images/hero/img2.jpeg" alt="img2" />
+          <img class="h-52 w-full rounded-xl object-cover shadow" src="/assets/images/hero/img3.jpeg" alt="img3" />
         </div>
       </section>
 
@@ -183,7 +183,11 @@
         const hero = document.querySelector(".hero-bg");
         if (!hero) return;
 
-        const slides = ["/media/img1.jpeg", "/media/img2.jpeg", "/media/img3.jpeg"];
+        const slides = [
+          "/assets/images/hero/img1.jpeg",
+          "/assets/images/hero/img2.jpeg",
+          "/assets/images/hero/img3.jpeg",
+        ];
         let index = 0;
 
         function setSlide(i) {

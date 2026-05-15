@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Vidyut PowerTech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body data-page="auth" class="bg-slate-50 text-slate-800">
+    <div id="navbar-root"></div>
+
+    <main class="mx-auto grid min-h-[70vh] max-w-5xl items-start gap-6 px-4 py-12 md:grid-cols-2 md:px-6">
+      <section class="rounded-lg bg-white p-6 shadow-sm">
+        <h1 class="text-2xl font-extrabold text-slate-900">Login</h1>
+        <form id="loginForm" class="mt-5 grid gap-4">
+          <label class="text-sm font-medium text-slate-700" for="loginEmail">Email</label>
+          <input id="loginEmail" name="email" type="email" required class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <label class="text-sm font-medium text-slate-700" for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" required class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <label id="ownerKeyWrap" class="hidden text-sm font-medium text-slate-700" for="ownerKey">Owner Key</label>
+          <input id="ownerKey" name="ownerKey" type="password" class="hidden rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <button type="submit" class="rounded-md bg-blue-700 px-4 py-3 text-sm font-bold text-white hover:bg-blue-800">Login</button>
+          <p id="loginStatus" class="text-sm" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section id="registerPanel" class="rounded-lg bg-white p-6 shadow-sm">
+        <h2 class="text-2xl font-extrabold text-slate-900">Register</h2>
+        <form id="registerForm" class="mt-5 grid gap-4">
+          <label class="text-sm font-medium text-slate-700" for="registerName">Name</label>
+          <input id="registerName" name="name" type="text" required class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <label class="text-sm font-medium text-slate-700" for="registerEmail">Email</label>
+          <input id="registerEmail" name="email" type="email" required class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <label class="text-sm font-medium text-slate-700" for="registerPassword">Password</label>
+          <input id="registerPassword" name="password" type="password" minlength="8" required class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <button type="submit" class="rounded-md bg-emerald-700 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-800">Create Account</button>
+          <p id="registerStatus" class="text-sm" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <div id="footer-root"></div>
+    <script src="/js/auth-client.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/auth.js"></script>
+  </body>
+</html>

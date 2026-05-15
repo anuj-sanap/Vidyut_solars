@@ -2,7 +2,7 @@
   <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 md:px-6">
     <a href="/index.html" class="flex items-center gap-2">
       <img
-        src="/logo.png"
+        src="/assets/images/brand/logo.png"
         alt="Vidyut PowerTech logo"
         class="h-14 w-14 object-contain"
       />
@@ -14,6 +14,9 @@
       <li><a data-nav="services" href="/services.html" class="nav-link text-slate-700 hover:text-emerald-700">Services</a></li>
       <li><a data-nav="projects" href="/projects.html" class="nav-link text-slate-700 hover:text-emerald-700">Projects</a></li>
       <li><a data-nav="contact" href="/contact.html" class="nav-link text-slate-700 hover:text-emerald-700">Contact</a></li>
+      <li><a id="ownerProjectsNavLink" href="/owner-projects.html" class="hidden text-slate-700 hover:text-emerald-700">Owner Projects</a></li>
+      <li><a id="authNavLink" data-nav="auth" href="/auth.html" class="nav-link text-slate-700 hover:text-emerald-700">Login</a></li>
+      <li><button id="logoutBtn" type="button" class="hidden text-slate-700 hover:text-red-700">Logout</button></li>
     </ul>
 
     <div class="relative">
@@ -29,6 +32,9 @@
           <a data-nav="about" href="/about.html" class="nav-link rounded px-2 py-1 text-slate-700 hover:bg-slate-100 hover:text-emerald-700">About</a>
           <a data-nav="calculator" href="/pages/calculator.html" class="nav-link rounded px-2 py-1 text-slate-700 hover:bg-slate-100 hover:text-emerald-700">Solar Calculator</a>
           <a data-nav="preview" href="/pages/preview.html" class="nav-link rounded px-2 py-1 text-slate-700 hover:bg-slate-100 hover:text-emerald-700">3D Preview</a>
+          <a id="mobileOwnerProjectsNavLink" href="/owner-projects.html" class="hidden rounded px-2 py-1 text-slate-700 hover:bg-slate-100 hover:text-emerald-700">Owner Projects</a>
+          <a id="mobileAuthNavLink" data-nav="auth" href="/auth.html" class="nav-link rounded px-2 py-1 text-slate-700 hover:bg-slate-100 hover:text-emerald-700">Login</a>
+          <button id="mobileLogoutBtn" type="button" class="hidden rounded px-2 py-1 text-left text-slate-700 hover:bg-slate-100 hover:text-red-700">Logout</button>
           <a href="tel:+917558200928" class="mt-1 rounded-md bg-yellow-400 px-3 py-2 text-center text-slate-900 hover:bg-yellow-300">Call Now</a>
         </div>
       </div>

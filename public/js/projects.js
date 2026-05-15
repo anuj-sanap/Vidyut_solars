@@ -66,7 +66,7 @@ function renderProjects(items) {
           : project.imagePath
             ? [project.imagePath]
             : [];
-        const coverImage = imageList[0] || "/logo.png";
+        const coverImage = imageList[0] || "/assets/images/brand/logo.png";
         const allImagesStrip = imageList
           .slice(1)
           .map(

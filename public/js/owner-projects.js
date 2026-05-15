@@ -8,8 +8,7 @@ function escapeHtml(value) {
 }
 
 function getOwnerKey() {
-  const input = document.querySelector("#ownerKey");
-  return String(input?.value || "").trim();
+  return window.VidyutAuth?.getToken?.() || "";
 }
 
 async function parseApiResponse(res) {
@@ -93,8 +92,7 @@ function renderOwnerProjects(items) {
 }
 
 async function loadOwnerProjects() {
-  const key = getOwnerKey();
-  if (!key) return;
+  if (!window.VidyutAuth?.requireLogin({ role: "admin" })) return;
   try {
     const res = await fetch("/api/projects");
     const data = await res.json();
@@ -111,8 +109,9 @@ async function updateProject(event) {
   const status = form.querySelector(".owner-item-status");
   const key = getOwnerKey();
   if (!key) {
-    status.textContent = "Owner key is required.";
+    status.textContent = "Admin login is required.";
     status.className = "owner-item-status text-xs text-red-600";
+    window.VidyutAuth?.redirectToLogin("admin");
     return;
   }
 
@@ -126,9 +125,9 @@ async function updateProject(event) {
   Array.from(form.newImages.files || []).forEach((file) => payload.append("projectImages", file));
 
   try {
-    const res = await fetch(`/api/admin/projects/${projectId}`, {
+    const res = await window.VidyutAuth.authFetch(`/api/admin/projects/${projectId}`, {
       method: "PUT",
-      headers: { "x-owner-key": key },
+      headers: { Authorization: `Bearer ${key}` },
       body: payload,
     });
     await parseApiResponse(res);
@@ -145,17 +144,18 @@ async function deleteProject(form) {
   const status = form.querySelector(".owner-item-status");
   const key = getOwnerKey();
   if (!key) {
-    status.textContent = "Owner key is required.";
+    status.textContent = "Admin login is required.";
     status.className = "owner-item-status text-xs text-red-600";
+    window.VidyutAuth?.redirectToLogin("admin");
     return;
   }
   if (!window.confirm("Delete this project permanently?")) return;
 
   const projectId = form.dataset.projectId;
   try {
-    const res = await fetch(`/api/admin/projects/${projectId}`, {
+    const res = await window.VidyutAuth.authFetch(`/api/admin/projects/${projectId}`, {
       method: "DELETE",
-      headers: { "x-owner-key": key },
+      headers: { Authorization: `Bearer ${key}` },
     });
     await parseApiResponse(res);
     await loadOwnerProjects();
@@ -170,11 +170,12 @@ async function uploadProject(event) {
   const form = event.target;
   const status = document.querySelector("#ownerStatus");
   const button = form.querySelector("button[type='submit']");
-  const key = String(form.ownerKey.value || "").trim();
+  const key = getOwnerKey();
 
   if (!key) {
-    status.textContent = "Owner key is required.";
+    status.textContent = "Admin login is required.";
     status.className = "text-sm text-red-600";
+    window.VidyutAuth?.redirectToLogin("admin");
     return;
   }
 
@@ -193,16 +194,14 @@ async function uploadProject(event) {
       payload.append("projectImages", file);
     });
 
-    const res = await fetch("/api/admin/projects", {
+    const res = await window.VidyutAuth.authFetch("/api/admin/projects", {
       method: "POST",
-      headers: { "x-owner-key": key },
+      headers: { Authorization: `Bearer ${key}` },
       body: payload,
     });
     await parseApiResponse(res);
 
-    const keySnapshot = key;
     form.reset();
-    form.ownerKey.value = keySnapshot;
     status.textContent = "Project uploaded successfully.";
     status.className = "text-sm text-emerald-700";
     await loadOwnerProjects();
@@ -216,11 +215,8 @@ async function uploadProject(event) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (!window.VidyutAuth?.requireLogin({ role: "admin" })) return;
   const form = document.querySelector("#ownerProjectForm");
   if (form) form.addEventListener("submit", uploadProject);
-  const ownerKeyInput = document.querySelector("#ownerKey");
-  if (ownerKeyInput) {
-    ownerKeyInput.addEventListener("change", loadOwnerProjects);
-    ownerKeyInput.addEventListener("blur", loadOwnerProjects);
-  }
+  loadOwnerProjects();
 });

@@ -200,14 +200,17 @@ function restoreInputs() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (!window.VidyutAuth?.requireLogin()) return;
+
   const form = document.querySelector("#solarCalculatorForm");
   const status = document.querySelector("#calcFormStatus");
   if (!form) return;
 
   restoreInputs();
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const button = form.querySelector("button[type='submit']");
     const plotSize = Number(form.plotSize.value);
     const bill = Number(form.bill.value);
     const selectedSystemSize = Number(form.systemSize.value);
@@ -217,16 +220,34 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const selectedPlan = selectedSystemSize ? findPlanBySystemSize(selectedSystemSize) : null;
-    const matchedPlan = selectedPlan || findBestPlan(plotSize, bill);
-    const data = {
-      plotSize,
-      bill,
-      selectedSystemSize: selectedPlan ? selectedSystemSize : "",
-      ...matchedPlan,
-    };
+    button.disabled = true;
+    button.textContent = "Calculating...";
 
-    persistResult(data);
-    updateResultUI(data);
+    try {
+      const res = await window.VidyutAuth.authFetch("/api/calculator", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plotSize,
+          bill,
+          systemSize: selectedSystemSize || "",
+        }),
+      });
+      const payload = await res.json();
+      if (!res.ok || !payload.success) {
+        throw new Error(payload.message || "Unable to calculate right now.");
+      }
+
+      persistResult(payload.result);
+      updateResultUI(payload.result);
+    } catch (error) {
+      if (status) status.textContent = error.message || "Unable to calculate right now.";
+      if (error.message === "Please login to continue.") {
+        window.VidyutAuth.redirectToLogin();
+      }
+    } finally {
+      button.disabled = false;
+      button.textContent = "Calculate";
+    }
   });
 });
