@@ -4,37 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Owner Project Upload | Vidyut PowerTech</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/tailwind.css" />
     <link rel="stylesheet" href="/css/styles.css" />
   </head>
-  <body class="bg-slate-100 text-slate-800">
+  <body class="bg-muted font-sans text-foreground">
     <main class="mx-auto max-w-3xl px-4 py-12 md:px-6">
-      <section class="rounded-2xl bg-white p-6 shadow">
-        <h1 class="text-2xl font-extrabold text-slate-900">Owner Project Upload</h1>
-        <p class="mt-2 text-sm text-slate-600">Add previous work images and location. This page is for owner use only.</p>
-        <p class="mt-1 text-xs text-slate-500">Login with an admin account before managing completed projects.</p>
+      <section class="theme-card-shadow">
+        <h1 class="font-display text-2xl text-foreground">Owner Project Upload</h1>
+        <p class="mt-2 text-sm text-muted-foreground">Add previous work images and location. This page is for owner use only.</p>
+        <p class="mt-1 text-xs text-muted-foreground">Login with an admin account before managing completed projects.</p>
 
         <form id="ownerProjectForm" class="mt-6 grid gap-4">
-          <label class="text-sm font-medium text-slate-700" for="title">Project Title</label>
-          <input id="title" name="title" type="text" required placeholder="Ex: 10kW Residential Rooftop" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <label class="text-sm font-medium text-foreground" for="title">Project Title</label>
+          <input id="title" name="title" type="text" required placeholder="Ex: 10kW Residential Rooftop" class="input-field" />
 
-          <label class="text-sm font-medium text-slate-700" for="location">Location</label>
-          <input id="location" name="location" type="text" required placeholder="Ex: Nashik, Maharashtra" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <label class="text-sm font-medium text-foreground" for="location">Location</label>
+          <input id="location" name="location" type="text" required placeholder="Ex: Nashik, Maharashtra" class="input-field" />
 
-          <label class="text-sm font-medium text-slate-700" for="description">Short Description (optional)</label>
-          <textarea id="description" name="description" rows="3" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" placeholder="Ex: On-grid system with net metering support"></textarea>
+          <label class="text-sm font-medium text-foreground" for="description">Short Description (optional)</label>
+          <textarea id="description" name="description" rows="3" class="input-field" placeholder="Ex: On-grid system with net metering support"></textarea>
 
-          <label class="text-sm font-medium text-slate-700" for="projectImages">Project Images</label>
-          <input id="projectImages" name="projectImages" type="file" multiple accept="image/*" required class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <label class="text-sm font-medium text-foreground" for="projectImages">Project Images</label>
+          <input id="projectImages" name="projectImages" type="file" multiple accept="image/*" required class="input-field" />
 
-          <button type="submit" class="rounded-md bg-blue-700 px-4 py-3 text-sm font-bold text-white hover:bg-blue-800">Upload Project</button>
+          <button type="submit" class="btn-primary">Upload Project</button>
           <p id="ownerStatus" class="text-sm"></p>
         </form>
       </section>
 
-      <section class="mt-8 rounded-2xl bg-white p-6 shadow">
-        <h2 class="text-xl font-bold text-slate-900">Manage Existing Projects</h2>
-        <p class="mt-2 text-sm text-slate-600">Edit title/location/description, add more images, or delete a project.</p>
+      <section class="theme-card-shadow mt-8">
+        <h2 class="font-display text-xl text-foreground">Manage Existing Projects</h2>
+        <p class="mt-2 text-sm text-muted-foreground">Edit title/location/description, add more images, or delete a project.</p>
         <div id="ownerProjectsList" class="mt-5 grid gap-4"></div>
       </section>
     </main>

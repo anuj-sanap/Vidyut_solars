@@ -5,7 +5,7 @@ services:
     plan: free
     autoDeploy: true
     rootDir: .
-    buildCommand: npm install
+    buildCommand: npm install && npm run build:css
     startCommand: npm start
     envVars:
       - key: NODE_VERSION

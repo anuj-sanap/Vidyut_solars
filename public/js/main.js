@@ -28,9 +28,32 @@ function highlightActiveNav() {
   if (!page) return;
   document.querySelectorAll(".nav-link").forEach((el) => {
     if (el.getAttribute("data-nav") === page) {
-      el.classList.add("text-emerald-700");
-      el.classList.add("font-extrabold");
+      el.classList.add("text-primary");
+      el.classList.add("font-bold");
     }
+  });
+}
+
+function setupRevealAnimations() {
+  const items = document.querySelectorAll("[data-reveal]");
+  if (!items.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.remove("reveal-hidden");
+        entry.target.classList.add("reveal-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -32px 0px" },
+  );
+
+  items.forEach((el, index) => {
+    el.classList.add("reveal-hidden");
+    el.style.animationDelay = `${index * 0.05}s`;
+    observer.observe(el);
   });
 }
 
@@ -114,6 +137,7 @@ async function bootLayout() {
   await loadComponent("#whatsapp-root", "/components/whatsapp-float.html");
   setupMenu();
   highlightActiveNav();
+  setupRevealAnimations();
   setupAuthNav();
   setYear();
   notifyVisit();

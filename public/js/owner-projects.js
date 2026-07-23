@@ -35,7 +35,7 @@ function renderOwnerProjects(items) {
   const holder = document.querySelector("#ownerProjectsList");
   if (!holder) return;
   if (!items.length) {
-    holder.innerHTML = `<p class="rounded-lg border border-slate-200 p-4 text-sm text-slate-600">No projects added yet.</p>`;
+    holder.innerHTML = `<p class="rounded-lg border border-border bg-muted p-4 text-sm text-muted-foreground">No projects added yet.</p>`;
     return;
   }
 
@@ -49,7 +49,7 @@ function renderOwnerProjects(items) {
 
       const imageTags = imagePaths
         .map(
-          (img) => `<label class="grid gap-2 rounded-md border border-slate-200 p-2 text-xs text-slate-600">
+          (img) => `<label class="grid gap-2 rounded-md border border-border p-2 text-xs text-muted-foreground">
             <span class="flex items-center gap-2">
               <input type="checkbox" class="keep-image" value="${escapeHtml(img)}" checked />
               <span class="truncate">${escapeHtml(img)}</span>
@@ -60,22 +60,22 @@ function renderOwnerProjects(items) {
         .join("");
 
       return `
-        <article class="rounded-xl border border-slate-200 p-4">
+        <article class="theme-card">
           <form class="owner-edit-form grid gap-3" data-project-id="${project.id}">
             <input type="hidden" name="projectId" value="${project.id}" />
-            <label class="text-sm font-medium text-slate-700">Project Title</label>
-            <input name="title" value="${escapeHtml(project.title || "")}" required class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-            <label class="text-sm font-medium text-slate-700">Location</label>
-            <input name="location" value="${escapeHtml(project.location || "")}" required class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-            <label class="text-sm font-medium text-slate-700">Description</label>
-            <textarea name="description" rows="2" class="rounded-md border border-slate-300 px-3 py-2 text-sm">${escapeHtml(project.description || "")}</textarea>
-            <label class="text-sm font-medium text-slate-700">Keep Existing Images</label>
-            <div class="grid gap-1 rounded-md border border-slate-200 p-2">${imageTags || "<p class='text-xs text-slate-500'>No images</p>"}</div>
-            <label class="text-sm font-medium text-slate-700">Add New Images (optional)</label>
-            <input name="newImages" type="file" multiple accept="image/*" class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+            <label class="text-sm font-medium text-foreground">Project Title</label>
+            <input name="title" value="${escapeHtml(project.title || "")}" required class="input-field" />
+            <label class="text-sm font-medium text-foreground">Location</label>
+            <input name="location" value="${escapeHtml(project.location || "")}" required class="input-field" />
+            <label class="text-sm font-medium text-foreground">Description</label>
+            <textarea name="description" rows="2" class="input-field">${escapeHtml(project.description || "")}</textarea>
+            <label class="text-sm font-medium text-foreground">Keep Existing Images</label>
+            <div class="grid gap-1 rounded-md border border-border p-2">${imageTags || "<p class='text-xs text-muted-foreground'>No images</p>"}</div>
+            <label class="text-sm font-medium text-foreground">Add New Images (optional)</label>
+            <input name="newImages" type="file" multiple accept="image/*" class="input-field" />
             <div class="flex flex-wrap gap-2">
-              <button type="submit" class="rounded-md bg-blue-700 px-3 py-2 text-xs font-bold text-white hover:bg-blue-800">Save Changes</button>
-              <button type="button" class="delete-project rounded-md bg-red-600 px-3 py-2 text-xs font-bold text-white hover:bg-red-700">Delete</button>
+              <button type="submit" class="btn-primary px-3 py-2 text-xs">Save Changes</button>
+              <button type="button" class="delete-project btn-destructive">Delete</button>
             </div>
             <p class="owner-item-status text-xs"></p>
           </form>
@@ -110,7 +110,7 @@ async function updateProject(event) {
   const key = getOwnerKey();
   if (!key) {
     status.textContent = "Admin login is required.";
-    status.className = "owner-item-status text-xs text-red-600";
+    status.className = "owner-item-status text-xs text-destructive";
     window.VidyutAuth?.redirectToLogin("admin");
     return;
   }
@@ -132,11 +132,11 @@ async function updateProject(event) {
     });
     await parseApiResponse(res);
     status.textContent = "Project updated.";
-    status.className = "owner-item-status text-xs text-emerald-700";
+    status.className = "owner-item-status text-xs text-primary";
     await loadOwnerProjects();
   } catch (error) {
     status.textContent = error.message || "Update failed.";
-    status.className = "owner-item-status text-xs text-red-600";
+    status.className = "owner-item-status text-xs text-destructive";
   }
 }
 
@@ -145,7 +145,7 @@ async function deleteProject(form) {
   const key = getOwnerKey();
   if (!key) {
     status.textContent = "Admin login is required.";
-    status.className = "owner-item-status text-xs text-red-600";
+    status.className = "owner-item-status text-xs text-destructive";
     window.VidyutAuth?.redirectToLogin("admin");
     return;
   }
@@ -161,7 +161,7 @@ async function deleteProject(form) {
     await loadOwnerProjects();
   } catch (error) {
     status.textContent = error.message || "Delete failed.";
-    status.className = "owner-item-status text-xs text-red-600";
+    status.className = "owner-item-status text-xs text-destructive";
   }
 }
 
@@ -174,7 +174,7 @@ async function uploadProject(event) {
 
   if (!key) {
     status.textContent = "Admin login is required.";
-    status.className = "text-sm text-red-600";
+    status.className = "text-sm text-destructive";
     window.VidyutAuth?.redirectToLogin("admin");
     return;
   }
@@ -203,11 +203,11 @@ async function uploadProject(event) {
 
     form.reset();
     status.textContent = "Project uploaded successfully.";
-    status.className = "text-sm text-emerald-700";
+    status.className = "text-sm text-primary";
     await loadOwnerProjects();
   } catch (error) {
     status.textContent = error.message || "Upload failed.";
-    status.className = "text-sm text-red-600";
+    status.className = "text-sm text-destructive";
   } finally {
     button.disabled = false;
     button.textContent = "Upload Project";

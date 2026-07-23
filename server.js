@@ -67,6 +67,7 @@ const VISITOR_ALERT_EMAILS = [
   "sanapanuj7@gmail.com",
   "vidyutsolarelectricals@gmail.com",
 ];
+const LEAD_ALERT_EMAILS = VISITOR_ALERT_EMAILS;
 
 const visitCooldownMs = 10 * 60 * 1000;
 const recentVisits = new Map();
@@ -491,6 +492,34 @@ async function sendVisitorEmail({ page, ip, userAgent, visitId }) {
   return { sent: true };
 }
 
+async function sendLeadEmail({ lead, ip, userAgent }) {
+  if (!transporter) return { sent: false, reason: "email-not-configured" };
+
+  const subject = `New solar quote request from ${lead.name}`;
+  const text = [
+    "A new quote request was submitted on the Vidyut PowerTech website.",
+    "",
+    `Name: ${lead.name}`,
+    `Phone: ${lead.phone}`,
+    `Location: ${lead.location}`,
+    `Plot Size: ${lead.plotSize} sq ft`,
+    `Monthly Electricity Bill: ${lead.electricityBill || "Not provided"}`,
+    `Source: ${lead.source || "website-form"}`,
+    `Submitted At: ${new Date().toLocaleString("en-IN")}`,
+    `IP: ${ip || "N/A"}`,
+    `Browser: ${userAgent || "N/A"}`,
+  ].join("\n");
+
+  await transporter.sendMail({
+    from: process.env.ALERT_FROM_EMAIL || process.env.SMTP_USER,
+    to: LEAD_ALERT_EMAILS.join(", "),
+    subject,
+    text,
+  });
+
+  return { sent: true };
+}
+
 function createUploader() {
   if (hasCloudinaryConfig) {
     return multer({
@@ -730,8 +759,17 @@ app.post("/api/notify-visit", visitRateLimit, async (req, res) => {
     }
     recentVisits.set(dedupeKey, Date.now());
 
-    const result = await sendVisitorEmail({ page, ip, userAgent, visitId });
-    return res.json({ success: true, ...result });
+    try {
+      const result = await sendVisitorEmail({ page, ip, userAgent, visitId });
+      return res.json({ success: true, ...result });
+    } catch (emailError) {
+      logServerError("notify-visit-email", emailError);
+      return res.json({
+        success: true,
+        sent: false,
+        reason: "email-send-failed",
+      });
+    }
   } catch (error) {
     logServerError("notify-visit", error);
     return res.status(500).json({
@@ -770,7 +808,7 @@ app.post("/api/leads", leadRateLimit, upload.array("siteImages", 6), async (req,
 
     const files = (req.files || []).map(normalizeUploadedFile);
 
-    await Lead.create({
+    const lead = await Lead.create({
       name: name.trim(),
       phone: cleanPhone,
       location: location.trim(),
@@ -779,6 +817,16 @@ app.post("/api/leads", leadRateLimit, upload.array("siteImages", 6), async (req,
       source,
       files,
     });
+
+    try {
+      await sendLeadEmail({
+        lead,
+        ip: clientIp(req),
+        userAgent: req.headers["user-agent"] || "",
+      });
+    } catch (emailError) {
+      logServerError("lead-email", emailError);
+    }
 
     return res.json({
       success: true,

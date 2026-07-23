@@ -51,7 +51,7 @@ function renderProjects(items) {
 
   if (!items.length) {
     grid.innerHTML = `
-      <article class="rounded-xl bg-white p-5 text-sm text-slate-600 shadow">
+      <article class="theme-card-shadow text-sm text-muted-foreground">
         No projects added yet. Please check back soon.
       </article>
     `;
@@ -82,18 +82,18 @@ function renderProjects(items) {
           .join("");
 
         return `
-      <article class="project-card overflow-hidden rounded-xl bg-white shadow">
+      <article class="project-card group-card overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40">
         <img
           src="${escapeHtml(coverImage)}"
           data-full-image="${escapeHtml(coverImage)}"
-          class="project-image h-56 w-full cursor-zoom-in object-cover"
+          class="project-image group-card-image h-56 w-full cursor-zoom-in object-cover"
           alt="${escapeHtml(project.title)} in ${escapeHtml(project.location)}"
         />
         <div class="p-4 text-sm">
-          <p class="font-semibold text-slate-900">${escapeHtml(project.title)}</p>
-          <p class="mt-1 text-slate-700">${escapeHtml(project.location)}</p>
-          ${imageList.length > 1 ? `<p class="mt-1 text-xs font-medium text-slate-500">${imageList.length} project images</p>` : ""}
-          ${project.description ? `<p class="mt-2 text-slate-600">${escapeHtml(project.description)}</p>` : ""}
+          <p class="font-display text-base text-foreground">${escapeHtml(project.title)}</p>
+          <p class="mt-1 text-muted-foreground">${escapeHtml(project.location)}</p>
+          ${imageList.length > 1 ? `<p class="mt-1 text-xs font-medium text-muted-foreground">${imageList.length} project images</p>` : ""}
+          ${project.description ? `<p class="mt-2 text-muted-foreground">${escapeHtml(project.description)}</p>` : ""}
           ${
             allImagesStrip
               ? `<div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">${allImagesStrip}</div>`

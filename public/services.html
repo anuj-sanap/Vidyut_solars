@@ -15,25 +15,28 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Solar Services in Nashik | Vidyut PowerTech" />
     <meta name="twitter:description" content="Compare our end-to-end solar services and book a free site visit in Nashik and nearby areas." />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/tailwind.css" />
     <link rel="stylesheet" href="/css/styles.css" />
   </head>
-  <body data-page="services" class="bg-slate-50 text-slate-800">
+  <body data-page="services" class="bg-background font-sans text-foreground">
     <div id="navbar-root"></div>
 
     <main class="mx-auto max-w-7xl px-4 py-14 md:px-6">
-      <h1 class="text-3xl font-extrabold text-slate-900 md:text-4xl">Solar Services in Nashik</h1>
-      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate-700">We design, install and maintain systems for homes and businesses across the Nashik region with transparent consultation.</p>
+      <h1 class="font-display text-4xl text-foreground md:text-5xl" data-reveal>Solar Services in Nashik</h1>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground" data-reveal>We design, install and maintain systems for homes and businesses across the Nashik region with transparent consultation.</p>
 
       <section class="mt-8 grid gap-6 md:grid-cols-3">
-        <article class="overflow-hidden rounded-2xl bg-white shadow-sm">
-          <img src="/assets/images/services/ongrid.png" alt="On-grid solar system installation" class="h-52 w-full object-cover" />
+        <article class="group-card overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40" data-reveal>
+          <img src="/assets/images/services/ongrid.png" alt="On-grid solar system installation" class="group-card-image h-52 w-full object-cover" />
           <div class="p-5">
-            <h2 class="text-xl font-bold text-emerald-700">On-grid Solar System</h2>
-            <p class="mt-2 text-sm text-slate-700">Cost-effective and efficient system connected directly to the electricity grid.</p>
-            <details class="mt-4 rounded-lg border border-slate-200 p-3">
-              <summary class="cursor-pointer text-sm font-semibold text-slate-900">View full description</summary>
-              <div class="mt-3 space-y-3 text-sm text-slate-700">
+            <h2 class="font-display text-xl text-primary">On-grid Solar System</h2>
+            <p class="mt-2 text-sm text-muted-foreground">Cost-effective and efficient system connected directly to the electricity grid.</p>
+            <details class="mt-4 rounded-lg border border-border p-3">
+              <summary class="cursor-pointer text-sm font-semibold text-foreground">View full description</summary>
+              <div class="mt-3 space-y-3 text-sm text-muted-foreground">
                 <p>
                   An on-grid solar system is a cost-effective and efficient solution that connects directly to the electricity grid. It generates power from sunlight using solar panels and converts it into usable electricity through an inverter.
                 </p>
@@ -43,7 +46,7 @@
                 <p>
                   This system reduces electricity bills significantly, requires low maintenance, and is ideal for areas with a stable grid supply. It is also eligible for government subsidies under schemes like PM Surya Ghar Yojana.
                 </p>
-                <p class="font-semibold text-slate-900">Key Benefits:</p>
+                <p class="font-semibold text-foreground">Key Benefits:</p>
                 <ul class="list-disc space-y-1 pl-5">
                   <li>Lower electricity bills</li>
                   <li>Net metering advantage</li>
@@ -59,21 +62,21 @@
           </div>
         </article>
 
-        <article class="overflow-hidden rounded-2xl bg-white shadow-sm">
-          <img src="/assets/images/services/offgrid.png" alt="Off-grid solar system with battery backup" class="h-52 w-full object-cover" />
+        <article class="group-card overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40" data-reveal>
+          <img src="/assets/images/services/offgrid.png" alt="Off-grid solar system with battery backup" class="group-card-image h-52 w-full object-cover" />
           <div class="p-5">
-            <h2 class="text-xl font-bold text-emerald-700">Off-grid Solar System</h2>
-            <p class="mt-2 text-sm text-slate-700">Independent solar power solution with battery storage and no grid dependency.</p>
-            <details class="mt-4 rounded-lg border border-slate-200 p-3">
-              <summary class="cursor-pointer text-sm font-semibold text-slate-900">View full description</summary>
-              <div class="mt-3 space-y-3 text-sm text-slate-700">
+            <h2 class="font-display text-xl text-primary">Off-grid Solar System</h2>
+            <p class="mt-2 text-sm text-muted-foreground">Independent solar power solution with battery storage and no grid dependency.</p>
+            <details class="mt-4 rounded-lg border border-border p-3">
+              <summary class="cursor-pointer text-sm font-semibold text-foreground">View full description</summary>
+              <div class="mt-3 space-y-3 text-sm text-muted-foreground">
                 <p>
                   An off-grid solar system is an independent power solution that does not connect to the electricity grid. It generates electricity using solar panels and stores it in batteries for use anytime, including at night or during power outages.
                 </p>
                 <p>
                   This system is ideal for areas with no grid supply or frequent power cuts. It ensures continuous power availability without depending on external electricity sources.
                 </p>
-                <p class="font-semibold text-slate-900">Key Benefits:</p>
+                <p class="font-semibold text-foreground">Key Benefits:</p>
                 <ul class="list-disc space-y-1 pl-5">
                   <li>Complete independence from the grid</li>
                   <li>Power available during outages</li>
@@ -89,21 +92,21 @@
           </div>
         </article>
 
-        <article class="overflow-hidden rounded-2xl bg-white shadow-sm">
-          <img src="/assets/images/services/hybrid.png" alt="Hybrid solar system combining grid and battery" class="h-52 w-full object-cover" />
+        <article class="group-card overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40" data-reveal>
+          <img src="/assets/images/services/hybrid.png" alt="Hybrid solar system combining grid and battery" class="group-card-image h-52 w-full object-cover" />
           <div class="p-5">
-            <h2 class="text-xl font-bold text-emerald-700">Hybrid Solar System</h2>
-            <p class="mt-2 text-sm text-slate-700">Smart system combining grid connection and battery backup for uninterrupted power.</p>
-            <details class="mt-4 rounded-lg border border-slate-200 p-3">
-              <summary class="cursor-pointer text-sm font-semibold text-slate-900">View full description</summary>
-              <div class="mt-3 space-y-3 text-sm text-slate-700">
+            <h2 class="font-display text-xl text-primary">Hybrid Solar System</h2>
+            <p class="mt-2 text-sm text-muted-foreground">Smart system combining grid connection and battery backup for uninterrupted power.</p>
+            <details class="mt-4 rounded-lg border border-border p-3">
+              <summary class="cursor-pointer text-sm font-semibold text-foreground">View full description</summary>
+              <div class="mt-3 space-y-3 text-sm text-muted-foreground">
                 <p>
                   A hybrid solar system combines the benefits of both on-grid and off-grid systems. It is connected to the electricity grid while also having battery storage for backup. Solar panels generate electricity during the day, which is used instantly, stored in batteries, or exported to the grid.
                 </p>
                 <p>
                   During power cuts, the system automatically uses stored battery power, ensuring uninterrupted electricity supply. This makes it a reliable and flexible solution for homes and businesses.
                 </p>
-                <p class="font-semibold text-slate-900">Key Benefits:</p>
+                <p class="font-semibold text-foreground">Key Benefits:</p>
                 <ul class="list-disc space-y-1 pl-5">
                   <li>Backup during power cuts</li>
                   <li>Lower electricity bills</li>
@@ -120,13 +123,14 @@
         </article>
       </section>
 
-      <section class="mt-12 rounded-xl bg-blue-800 p-6 text-white">
-        <h2 class="text-2xl font-bold">Need the Best Solar Service in Nashik?</h2>
-        <p class="mt-3 text-sm">Book a free site visit today and get a transparent estimate.</p>
+      <section class="section-cta relative mt-12 overflow-hidden" data-reveal>
+        <div aria-hidden="true" class="ambient-blob -right-10 top-0 h-48 w-48"></div>
+        <h2 class="font-display text-2xl md:text-3xl">Need the Best Solar Service in Nashik?</h2>
+        <p class="mt-3 text-sm text-primary-foreground/80">Book a free site visit today and get a transparent estimate.</p>
         <div class="mt-5 flex flex-wrap gap-3">
-          <a href="/contact.html" class="rounded-md bg-yellow-400 px-5 py-3 text-sm font-bold text-slate-900">Get Free Quote</a>
-          <a href="tel:+917558200928" class="rounded-md bg-white px-5 py-3 text-sm font-bold text-blue-800">Call Now</a>
-          <a href="https://wa.me/917558200928?text=Hi%20Vidyut%20PowerTech%2C%20I%20want%20a%20solar%20installation%20quote%20in%20Nashik" target="_blank" rel="noopener" class="rounded-md bg-blue-600 px-5 py-3 text-sm font-bold text-white">WhatsApp</a>
+          <a href="/contact.html" class="btn-primary">Get Free Quote</a>
+          <a href="tel:+917558200928" class="btn-secondary border-primary-foreground/20 bg-primary-foreground text-primary hover:border-primary-foreground/40">Call Now</a>
+          <a href="https://wa.me/917558200928?text=Hi%20Vidyut%20PowerTech%2C%20I%20want%20a%20solar%20installation%20quote%20in%20Nashik" target="_blank" rel="noopener" class="btn-primary">WhatsApp</a>
         </div>
       </section>
     </main>

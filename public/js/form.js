@@ -19,7 +19,7 @@ async function handleLeadFormSubmit(event) {
   if (!name || !location || !phone || !plotSize) {
     if (statusBox) {
       statusBox.textContent = "Please fill all required fields before submitting.";
-      statusBox.className = "form-status mt-3 text-sm text-red-600";
+      statusBox.className = "form-status mt-3 text-sm text-destructive";
     }
     return;
   }
@@ -27,7 +27,7 @@ async function handleLeadFormSubmit(event) {
   if (!/^\d{10}$/.test(phone)) {
     if (statusBox) {
       statusBox.textContent = "Please enter a valid 10-digit phone number.";
-      statusBox.className = "form-status mt-3 text-sm text-red-600";
+      statusBox.className = "form-status mt-3 text-sm text-destructive";
     }
     return;
   }
@@ -35,7 +35,7 @@ async function handleLeadFormSubmit(event) {
   if (plotSize < 100) {
     if (statusBox) {
       statusBox.textContent = "Plot size should be at least 100 sq ft.";
-      statusBox.className = "form-status mt-3 text-sm text-red-600";
+      statusBox.className = "form-status mt-3 text-sm text-destructive";
     }
     return;
   }
@@ -59,12 +59,12 @@ async function handleLeadFormSubmit(event) {
     form.reset();
     if (statusBox) {
       statusBox.textContent = `${data.message} Our team will contact you shortly.`;
-      statusBox.className = "form-status mt-3 text-sm text-emerald-700";
+      statusBox.className = "form-status mt-3 text-sm text-primary";
     }
   } catch (error) {
     if (statusBox) {
       statusBox.textContent = error.message || "Submission failed. Please try again.";
-      statusBox.className = "form-status mt-3 text-sm text-red-600";
+      statusBox.className = "form-status mt-3 text-sm text-destructive";
     }
   } finally {
     submitBtn.disabled = false;

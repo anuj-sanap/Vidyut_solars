@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.20 0.04 255);
+    --primary: oklch(0.55 0.20 255);
+    --primary-foreground: oklch(1 0 0);
+    --accent: oklch(0.70 0.15 240);
+    --accent-foreground: oklch(0.20 0.04 255);
+    --card: oklch(0.99 0.005 250);
+    --card-foreground: oklch(0.20 0.04 255);
+    --popover: oklch(0.99 0.005 250);
+    --popover-foreground: oklch(0.20 0.04 255);
+    --muted: oklch(0.96 0.02 250);
+    --muted-foreground: oklch(0.45 0.03 255);
+    --secondary: oklch(0.96 0.02 250);
+    --secondary-foreground: oklch(0.20 0.04 255);
+    --border: oklch(0.90 0.02 250);
+    --destructive: oklch(0.62 0.22 27);
+    --destructive-foreground: oklch(1 0 0);
+    --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --gradient-hero: radial-gradient(
+        ellipse 80% 50% at 50% -20%,
+        oklch(0.70 0.15 240 / 0.25),
+        transparent
+      ),
+      linear-gradient(to bottom, oklch(1 0 0), oklch(0.96 0.02 250));
+    --gradient-gold: linear-gradient(135deg, oklch(0.55 0.20 255), oklch(0.70 0.15 240));
+    --shadow-glow: 0 20px 60px -20px oklch(0.55 0.20 255 / 0.35);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    font-feature-settings: "ss01" on, "cv11" on;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+}
+
+@layer components {
+  .label-micro {
+    @apply text-xs uppercase tracking-[0.2em] text-primary;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-all hover:opacity-90;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-all;
+  }
+
+  .btn-secondary:hover {
+    border-color: oklch(0.55 0.20 255 / 0.4);
+  }
+
+  .btn-destructive {
+    @apply inline-flex items-center justify-center rounded-md bg-destructive px-3 py-2 text-xs font-semibold text-destructive-foreground transition-all hover:opacity-90;
+  }
+
+  .alert-info {
+    @apply rounded-md border p-3 text-xs text-foreground;
+    border-color: oklch(0.70 0.15 240 / 0.3);
+    background-color: oklch(0.70 0.15 240 / 0.1);
+  }
+
+  .preview-canvas {
+    @apply relative mt-4 h-[300px] overflow-hidden rounded-lg bg-foreground sm:h-[360px] md:h-[420px];
+  }
+
+  .theme-card {
+    @apply rounded-xl border border-border bg-card p-6 transition-all duration-300;
+  }
+
+  .theme-card:hover {
+    transform: translateY(-0.25rem);
+    border-color: oklch(0.55 0.20 255 / 0.4);
+  }
+
+  .theme-card-shadow {
+    @apply theme-card shadow-sm;
+  }
+
+  .story-link {
+    @apply relative inline-block font-semibold text-primary transition-colors;
+  }
+
+  .story-link::after {
+    content: "";
+    @apply absolute bottom-0 left-0 h-px w-0 bg-primary transition-all duration-300;
+  }
+
+  .story-link:hover::after {
+    @apply w-full;
+  }
+
+  .link-arrow {
+    @apply inline-flex items-center gap-1 transition-all duration-300 group-hover:gap-2;
+  }
+
+  .hero-headline-gradient {
+    @apply bg-gradient-to-r from-accent via-primary to-accent bg-clip-text text-transparent;
+  }
+
+  .hero-bg {
+    @apply relative overflow-hidden bg-gradient-hero;
+  }
+
+  .input-field {
+    @apply w-full rounded-md border border-border bg-background px-3 py-2 text-sm transition-colors focus:outline-none;
+  }
+
+  .input-field:focus {
+    border-color: oklch(0.55 0.20 255 / 0.5);
+    box-shadow: 0 0 0 2px oklch(0.55 0.20 255 / 0.2);
+  }
+
+  .section-cta {
+    @apply relative overflow-hidden rounded-xl bg-primary p-6 text-primary-foreground;
+  }
+
+  .ambient-blob {
+    @apply pointer-events-none absolute rounded-full blur-3xl;
+    background-color: oklch(0.55 0.20 255 / 0.1);
+  }
+
+  .status-dot {
+    @apply inline-block h-2 w-2 animate-pulse rounded-full bg-primary;
+  }
+}
+
+@layer utilities {
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+
+  .reveal-hidden {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .reveal-visible {
+    @apply animate-fade-in;
+  }
+
+  .group-card:hover .group-card-image {
+    @apply scale-105;
+  }
+
+  .group-card-image {
+    @apply transition-transform duration-300;
+  }
+}

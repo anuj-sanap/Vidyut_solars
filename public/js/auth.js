@@ -25,7 +25,7 @@ async function parseAuthResponse(res) {
 function showStatus(el, message, isError) {
   if (!el) return;
   el.textContent = message;
-  el.className = `text-sm ${isError ? "text-red-600" : "text-emerald-700"}`;
+  el.className = `text-sm ${isError ? "text-destructive" : "text-primary"}`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
