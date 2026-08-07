@@ -1,3 +1,25 @@
+.step-card {
+  overflow: hidden;
+}
+
+.step-card .step-description {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease, margin 0.25s ease;
+  margin-top: 0;
+}
+
+.step-card:hover .step-description,
+.step-card:focus-within .step-description,
+.step-card:focus .step-description {
+  max-height: 180px;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 0.5rem;
+}
+
 .hero-bg {
   --hero-bg-image: url("/bg_landing.jpeg");
   position: relative;
