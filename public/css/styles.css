@@ -1,7 +1,35 @@
 .hero-bg {
-  --hero-bg-image: url("https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1800&q=80");
-  background-image: var(--gradient-hero);
+  --hero-bg-image: url("/bg_landing.jpeg");
+  position: relative;
+  isolation: isolate;
+  min-height: 500px;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(248, 248, 252, 0.98) 0%,
+      rgba(248, 250, 252, 0.94) 24%,
+      rgba(248, 250, 252, 0.80) 44%,
+      rgba(248, 250, 252, 0.42) 68%,
+      rgba(248, 250, 252, 0.06) 88%,
+      rgba(248, 250, 252, 0) 100%
+    ),
+    var(--hero-bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
   transition: background-image 0.7s ease-in-out;
+}
+
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.22), transparent 40%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .hero-accent {
@@ -27,6 +55,12 @@
   background: oklch(0.55 0.20 255 / 0.15);
 }
 
+.hero-content {
+  position: relative;
+  z-index: 1;
+  animation: fade-in 0.9s ease-out both;
+}
+
 .hero-stat {
   border: 1px solid oklch(0.90 0.02 250);
   background: oklch(0.99 0.005 250 / 0.8);
@@ -35,20 +69,52 @@
   padding: 0.8rem;
 }
 
-.hero-logo {
-  filter: drop-shadow(var(--shadow-glow));
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #0B255A !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #0B255A !important;
 }
 
-.hero-headline-enter {
-  animation: fade-in 0.8s ease-out forwards;
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: #ffffff !important;
+  color: #0B255A !important;
+  border-color: #0B255A !important;
+}
+
+h1,
+h2,
+h3,
+.font-display,
+.hero-headline-gradient {
+  color: #0B255A !important;
+}
+
+.hero-headline-gradient {
+  background: none !important;
+  -webkit-text-fill-color: #0B255A !important;
 }
 
 @media (max-width: 768px) {
+  .hero-bg {
+    border-bottom-left-radius: 1.25rem;
+    border-bottom-right-radius: 1.25rem;
+  }
+
   .hero-accent-blue,
   .hero-accent-sky {
     width: 180px;
     height: 180px;
     filter: blur(40px);
+  }
+
+  .hero-content {
+    max-width: none;
+    padding: 1.5rem;
   }
 }
 

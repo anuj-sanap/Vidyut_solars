@@ -7,11 +7,11 @@ module.exports = {
         background: "oklch(1 0 0)",
         foreground: "oklch(0.20 0.04 255)",
         primary: {
-          DEFAULT: "oklch(0.55 0.20 255)",
+          DEFAULT: "#0B255A",
           foreground: "oklch(1 0 0)",
         },
         accent: {
-          DEFAULT: "oklch(0.70 0.15 240)",
+          DEFAULT: "#0B255A",
           foreground: "oklch(0.20 0.04 255)",
         },
         card: {
@@ -37,8 +37,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['"Instrument Serif"', "ui-serif", "Georgia", "serif"],
-        sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ['"Playfair Display"', "Georgia", "serif"],
+        sans: ['"Manrope"', "ui-sans-serif", "system-ui", "sans-serif"],
       },
       letterSpacing: {
         display: "-0.01em",

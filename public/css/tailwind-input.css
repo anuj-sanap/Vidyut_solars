@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.20 0.04 255);
-    --primary: oklch(0.55 0.20 255);
-    --primary-foreground: oklch(1 0 0);
-    --accent: oklch(0.70 0.15 240);
+    --background: #f7f8fc;
+    --foreground: #0f172a;
+    --primary: #0B255A;
+    --primary-foreground: #ffffff;
+    --accent: #0B255A;
     --accent-foreground: oklch(0.20 0.04 255);
-    --card: oklch(0.99 0.005 250);
-    --card-foreground: oklch(0.20 0.04 255);
-    --popover: oklch(0.99 0.005 250);
-    --popover-foreground: oklch(0.20 0.04 255);
-    --muted: oklch(0.96 0.02 250);
-    --muted-foreground: oklch(0.45 0.03 255);
-    --secondary: oklch(0.96 0.02 250);
-    --secondary-foreground: oklch(0.20 0.04 255);
-    --border: oklch(0.90 0.02 250);
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    --muted: #eef2f7;
+    --muted-foreground: #475569;
+    --secondary: #eef2f7;
+    --secondary-foreground: #0f172a;
+    --border: #dbe3ef;
     --destructive: oklch(0.62 0.22 27);
     --destructive-foreground: oklch(1 0 0);
-    --font-display: "Instrument Serif", ui-serif, Georgia, serif;
-    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Playfair Display", Georgia, serif;
+    --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
     --gradient-hero: radial-gradient(
         ellipse 80% 50% at 50% -20%,
         oklch(0.70 0.15 240 / 0.25),
