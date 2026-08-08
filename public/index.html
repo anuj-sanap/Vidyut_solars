@@ -141,15 +141,96 @@
         </div>
       </section>
 
-      <section class="relative overflow-hidden bg-primary text-primary-foreground">
-        <div aria-hidden="true" class="ambient-blob -left-20 top-0 h-64 w-64"></div>
-        <div aria-hidden="true" class="ambient-blob -right-20 bottom-0 h-72 w-72"></div>
-        <div class="relative mx-auto max-w-7xl px-4 py-14 md:px-6">
-          <h2 class="font-display text-3xl md:text-4xl" data-reveal>What Customers Say</h2>
-          <div class="mt-6 grid gap-5 md:grid-cols-3">
-            <blockquote class="rounded-xl border border-primary-foreground/10 bg-primary-foreground/5 p-5 text-sm backdrop-blur" data-reveal>"Very professional team. Installation was smooth and clean."</blockquote>
-            <blockquote class="rounded-xl border border-primary-foreground/10 bg-primary-foreground/5 p-5 text-sm backdrop-blur" data-reveal>"Our electricity bill reduced heavily in 2 months."</blockquote>
-            <blockquote class="rounded-xl border border-primary-foreground/10 bg-primary-foreground/5 p-5 text-sm backdrop-blur" data-reveal>"Best solar rooftop Nashik service with proper support."</blockquote>
+      <section class="customer-feedback-section">
+        <div class="customer-feedback-wrap">
+          <div class="feedback-chip" data-reveal>
+            <span aria-hidden="true" class="feedback-chip-icon">☼</span>
+            <span>CUSTOMER FEEDBACK</span>
+          </div>
+
+          <h2 class="feedback-title" data-reveal>
+            What Our <span>Customers</span> Say
+          </h2>
+          <div class="feedback-divider" aria-hidden="true"></div>
+          <p class="feedback-subtitle" data-reveal>
+            Real experiences from our happy customers who trust
+            <span>Vidyut Powertech </span> for their journey.
+          </p>
+
+          <div id="feedbackCards" class="feedback-cards">
+            <article class="feedback-card" data-reveal>
+              <div class="feedback-quote">“</div>
+              <p class="feedback-text">Professional team, quality installation, and excellent service from start to finish.</p>
+              <div class="feedback-author-row">
+                <span class="feedback-avatar">👤</span>
+                <div>
+                  <div class="feedback-author">Rahul P.</div>
+                  <div class="feedback-location">📍 Nashik</div>
+                </div>
+                <div class="star-row">★★★★★</div>
+              </div>
+            </article>
+
+            <article class="feedback-card" data-reveal>
+              <div class="feedback-quote">“</div>
+              <p class="feedback-text">Our solar system is performing really well. The installation process was smooth and hassle-free.</p>
+              <div class="feedback-author-row">
+                <span class="feedback-avatar">👤</span>
+                <div>
+                  <div class="feedback-author">Sneha K.</div>
+                  <div class="feedback-location">📍 Panchavati, Nashik</div>
+                </div>
+                <div class="star-row">★★★★★</div>
+              </div>
+            </article>
+
+            <article class="feedback-card" data-reveal>
+              <div class="feedback-quote">“</div>
+              <p class="feedback-text">Excellent rooftop solar service in Nashik with quick response and reliable after-sales support.</p>
+              <div class="feedback-author-row">
+                <span class="feedback-avatar">👤</span>
+                <div>
+                  <div class="feedback-author">Amit S.</div>
+                  <div class="feedback-location">📍 CIDCO, Nashik</div>
+                </div>
+                <div class="star-row">★★★★★</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="feedback-more-row">
+            <button id="feedbackMoreBtn" class="feedback-more-btn" type="button">More</button>
+          </div>
+
+          <div class="quality-strip">
+            <article class="quality-item">
+              <span class="quality-icon">✓</span>
+              <div>
+                <div class="quality-title">Quality Assurance</div>
+                <div class="quality-subtitle">Premium quality products and safe installations</div>
+              </div>
+            </article>
+            <article class="quality-item">
+              <span class="quality-icon">☎</span>
+              <div>
+                <div class="quality-title">Expert Support</div>
+                <div class="quality-subtitle">Dedicated support before, during &amp; after installation</div>
+              </div>
+            </article>
+            <article class="quality-item">
+              <span class="quality-icon">₹</span>
+              <div>
+                <div class="quality-title">Cost Savings</div>
+                <div class="quality-subtitle">Reduce electricity bills and save more</div>
+              </div>
+            </article>
+            <article class="quality-item">
+              <span class="quality-icon">♢</span>
+              <div>
+                <div class="quality-title">Reliable Warranty</div>
+                <div class="quality-subtitle">Assured performance with reliable warranty</div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
@@ -196,6 +277,7 @@
     <div id="whatsapp-root"></div>
 
     <script src="/js/main.js"></script>
+    <script src="/js/feedback.js"></script>
     <script src="/js/form.js"></script>
   </body>
 </html>

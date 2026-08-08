@@ -40,6 +40,27 @@
         <p class="mt-2 text-sm text-muted-foreground">Edit title/location/description, add more images, or delete a project.</p>
         <div id="ownerProjectsList" class="mt-5 grid gap-4"></div>
       </section>
+
+      <section class="theme-card-shadow mt-8">
+        <h2 class="font-display text-xl text-foreground">Manage Customer Feedback</h2>
+        <p class="mt-2 text-sm text-muted-foreground">Add a new testimonial or keep the customer story wall up to date.</p>
+
+        <form id="feedbackAdminForm" class="mt-5 grid gap-4">
+          <label class="text-sm font-medium text-foreground" for="feedbackName">Customer Name</label>
+          <input id="feedbackName" name="name" type="text" required placeholder="Customer name" class="input-field" />
+
+          <label class="text-sm font-medium text-foreground" for="feedbackLocation">Location</label>
+          <input id="feedbackLocation" name="location" type="text" placeholder="Nashik" class="input-field" />
+
+          <label class="text-sm font-medium text-foreground" for="feedbackQuote">Feedback</label>
+          <textarea id="feedbackQuote" name="quote" rows="4" required placeholder="Customer feedback" class="input-field"></textarea>
+
+          <button type="submit" class="btn-primary w-fit">Add Feedback</button>
+          <p id="feedbackAdminStatus" class="text-sm" aria-live="polite"></p>
+        </form>
+
+        <div id="feedbackAdminList" class="mt-6 grid gap-4"></div>
+      </section>
     </main>
     <script src="/js/auth-client.js"></script>
     <script src="/js/owner-projects.js?v=3"></script>

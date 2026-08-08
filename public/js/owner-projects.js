@@ -91,6 +91,72 @@ function renderOwnerProjects(items) {
   });
 }
 
+function renderFeedbackAdmin(items) {
+  const holder = document.querySelector("#feedbackAdminList");
+  if (!holder) return;
+
+  if (!items.length) {
+    holder.innerHTML = `<p class="rounded-lg border border-border bg-muted p-4 text-sm text-muted-foreground">No customer feedback added yet.</p>`;
+    return;
+  }
+
+  holder.innerHTML = items
+    .map(
+      (item) => `<article class="theme-card grid gap-3" data-feedback-id="${escapeHtml(item.id)}">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <div class="font-semibold text-foreground">${escapeHtml(item.name || "Customer")}</div>
+            <div class="text-xs text-muted-foreground">${escapeHtml(item.location || "Nashik")}</div>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" class="delete-feedback btn-destructive px-3 py-2 text-xs">Delete</button>
+          </div>
+        </div>
+        <p class="text-sm text-muted-foreground">${escapeHtml(item.quote || "")}</p>
+      </article>`,
+    )
+    .join("");
+
+  holder.querySelectorAll(".delete-feedback").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const article = button.closest("[data-feedback-id]");
+      const id = article?.dataset?.feedbackId;
+      if (!id) return;
+
+      const key = getOwnerKey();
+      if (!key) {
+        return window.VidyutAuth?.redirectToLogin("admin");
+      }
+
+      try {
+        const res = await window.VidyutAuth.authFetch(`/api/admin/feedback/${id}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${key}` },
+        });
+        await parseApiResponse(res);
+        await loadFeedbackAdmin();
+      } catch (error) {
+        const status = document.querySelector("#feedbackAdminStatus");
+        if (status) {
+          status.textContent = error.message || "Unable to delete feedback.";
+          status.className = "text-sm text-destructive";
+        }
+      }
+    });
+  });
+}
+
+async function loadFeedbackAdmin() {
+  try {
+    const res = await fetch("/api/feedback");
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.message || "Unable to load feedback.");
+    renderFeedbackAdmin(Array.isArray(data.feedback) ? data.feedback : []);
+  } catch (error) {
+    renderFeedbackAdmin([]);
+  }
+}
+
 async function loadOwnerProjects() {
   if (!window.VidyutAuth?.requireLogin({ role: "admin" })) return;
   try {
@@ -214,9 +280,147 @@ async function uploadProject(event) {
   }
 }
 
+async function addFeedback(event) {
+  event.preventDefault();
+  const form = event.target;
+  const status = document.querySelector("#feedbackAdminStatus");
+  const key = getOwnerKey();
+
+  if (!key) {
+    if (status) {
+      status.textContent = "Admin login is required.";
+      status.className = "text-sm text-destructive";
+    }
+    window.VidyutAuth?.redirectToLogin("admin");
+    return;
+  }
+
+  try {
+    const payload = {
+      name: form.name.value,
+      location: form.location.value,
+      quote: form.quote.value,
+    };
+
+    const res = await window.VidyutAuth.authFetch("/api/admin/feedback", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await parseApiResponse(res);
+    if (status) {
+      status.textContent = data.message || "Feedback added.";
+      status.className = "text-sm text-primary";
+    }
+
+    form.reset();
+    await loadFeedbackAdmin();
+    await loadFeedbackHomepage();
+  } catch (error) {
+    if (status) {
+      status.textContent = error.message || "Unable to add feedback.";
+      status.className = "text-sm text-destructive";
+    }
+  }
+}
+
+async function loadFeedbackHomepage() {
+  try {
+    const res = await fetch("/api/feedback");
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.message || "Unable to load feedback.");
+
+    const items = Array.isArray(data.feedback) ? data.feedback : [];
+    const holder = document.querySelector("#feedbackCards");
+    if (!holder) return;
+
+    if (!items.length) {
+      holder.innerHTML = `<article class="feedback-card"><div class="feedback-text">No customer feedback yet.</div></article>`;
+      return;
+    }
+
+    const firstItems = items.slice(0, 3);
+    holder.innerHTML = firstItems
+      .map(
+        (item) => `<article class="feedback-card" data-reveal>
+          <div class="feedback-quote">“</div>
+          <p class="feedback-text">${escapeHtml(item.quote || "")}</p>
+          <div class="feedback-author-row">
+            <span class="feedback-avatar">👤</span>
+            <div>
+              <div class="feedback-author">${escapeHtml(item.name || "Customer")}</div>
+              <div class="feedback-location">📍 ${escapeHtml(item.location || "Nashik")}</div>
+            </div>
+            <div class="star-row">★★★★★</div>
+          </div>
+        </article>`,
+      )
+      .join("");
+  } catch (_) {
+    const holder = document.querySelector("#feedbackCards");
+    if (holder) {
+      holder.innerHTML = `<article class="feedback-card"><div class="feedback-text">No customer feedback yet.</div></article>`;
+    }
+  }
+}
+
+async function setupFeedbackMoreButton() {
+  const moreBtn = document.querySelector("#feedbackMoreBtn");
+  if (!moreBtn) return;
+
+  moreBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch("/api/feedback");
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message || "Unable to load feedback.");
+
+      const items = Array.isArray(data.feedback) ? data.feedback : [];
+      const holder = document.querySelector("#feedbackCards");
+      if (!holder) return;
+
+      if (!items.length) {
+        holder.innerHTML = `<article class="feedback-card"><div class="feedback-text">No customer feedback yet.</div></article>`;
+        return;
+      }
+
+      holder.innerHTML = items
+        .map(
+          (item) => `<article class="feedback-card" data-reveal>
+            <div class="feedback-quote">“</div>
+            <p class="feedback-text">${escapeHtml(item.quote || "")}</p>
+            <div class="feedback-author-row">
+              <span class="feedback-avatar">👤</span>
+              <div>
+                <div class="feedback-author">${escapeHtml(item.name || "Customer")}</div>
+                <div class="feedback-location">📍 ${escapeHtml(item.location || "Nashik")}</div>
+              </div>
+              <div class="star-row">★★★★★</div>
+            </div>
+          </article>`,
+        )
+        .join("");
+
+      moreBtn.textContent = "More Closed";
+      moreBtn.disabled = true;
+    } catch (_) {
+      moreBtn.textContent = "Unable to load";
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  if (!window.VidyutAuth?.requireLogin({ role: "admin" })) return;
   const form = document.querySelector("#ownerProjectForm");
   if (form) form.addEventListener("submit", uploadProject);
+
+  const feedbackForm = document.querySelector("#feedbackAdminForm");
+  if (feedbackForm) feedbackForm.addEventListener("submit", addFeedback);
+
+  if (!window.VidyutAuth?.requireLogin({ role: "admin" })) return;
+
   loadOwnerProjects();
+  loadFeedbackAdmin();
 });
+
+loadFeedbackHomepage();
+setupFeedbackMoreButton();

@@ -448,6 +448,15 @@ const projectSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+const feedbackSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    location: { type: String, default: "", trim: true },
+    quote: { type: String, required: true, trim: true },
+  },
+  { timestamps: true },
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -460,6 +469,7 @@ const userSchema = new mongoose.Schema(
 
 const Lead = mongoose.model("Lead", leadSchema);
 const Project = mongoose.model("Project", projectSchema);
+const Feedback = mongoose.model("Feedback", feedbackSchema);
 const User = mongoose.model("User", userSchema);
 
 function cleanupOldVisits() {
@@ -556,6 +566,17 @@ function projectToResponse(projectDoc) {
     location: projectDoc.location,
     description: projectDoc.description || "",
     imagePaths: Array.isArray(projectDoc.imagePaths) ? projectDoc.imagePaths : [],
+  };
+}
+
+function feedbackToResponse(feedbackDoc) {
+  return {
+    id: feedbackDoc._id.toString(),
+    createdAt: feedbackDoc.createdAt,
+    updatedAt: feedbackDoc.updatedAt,
+    name: feedbackDoc.name,
+    location: feedbackDoc.location || "",
+    quote: feedbackDoc.quote || "",
   };
 }
 
@@ -850,6 +871,117 @@ app.get("/api/projects", async (_, res) => {
     return res.status(500).json({
       success: false,
       message: "Unable to fetch projects.",
+    });
+  }
+});
+
+app.get("/api/feedback", async (_, res) => {
+  try {
+    const feedbackItems = await Feedback.find({}).sort({ createdAt: -1 });
+    return res.json({
+      success: true,
+      feedback: feedbackItems.map(feedbackToResponse),
+    });
+  } catch (error) {
+    logServerError("list-feedback", error);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to fetch customer feedback.",
+    });
+  }
+});
+
+app.post("/api/admin/feedback", adminRateLimit, requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const name = String(req.body?.name || "").trim();
+    const location = String(req.body?.location || "").trim();
+    const quote = String(req.body?.quote || "").trim();
+
+    if (!name || !quote) {
+      return res.status(400).json({
+        success: false,
+        message: "Customer name and feedback message are required.",
+      });
+    }
+
+    const feedback = await Feedback.create({ name, location, quote });
+    return res.status(201).json({
+      success: true,
+      feedback: feedbackToResponse(feedback),
+      message: "Customer feedback added successfully.",
+    });
+  } catch (error) {
+    logServerError("create-feedback", error);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to save customer feedback.",
+    });
+  }
+});
+
+app.put("/api/admin/feedback/:id", adminRateLimit, requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const feedbackId = req.params.id;
+    if (!mongoose.isValidObjectId(feedbackId)) {
+      return res.status(400).json({ success: false, message: "Invalid feedback id." });
+    }
+
+    const name = String(req.body?.name || "").trim();
+    const location = String(req.body?.location || "").trim();
+    const quote = String(req.body?.quote || "").trim();
+
+    if (!name || !quote) {
+      return res.status(400).json({
+        success: false,
+        message: "Customer name and feedback message are required.",
+      });
+    }
+
+    const feedback = await Feedback.findByIdAndUpdate(
+      feedbackId,
+      { name, location, quote },
+      { new: true, runValidators: true },
+    );
+
+    if (!feedback) {
+      return res.status(404).json({ success: false, message: "Feedback not found." });
+    }
+
+    return res.json({
+      success: true,
+      feedback: feedbackToResponse(feedback),
+      message: "Customer feedback updated.",
+    });
+  } catch (error) {
+    logServerError("update-feedback", error);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to update customer feedback.",
+    });
+  }
+});
+
+app.delete("/api/admin/feedback/:id", adminRateLimit, requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const feedbackId = req.params.id;
+    if (!mongoose.isValidObjectId(feedbackId)) {
+      return res.status(400).json({ success: false, message: "Invalid feedback id." });
+    }
+
+    const feedback = await Feedback.findByIdAndDelete(feedbackId);
+    if (!feedback) {
+      return res.status(404).json({ success: false, message: "Feedback not found." });
+    }
+
+    return res.json({
+      success: true,
+      message: "Customer feedback removed.",
+    });
+  } catch (error) {
+    logServerError("delete-feedback", error);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to delete customer feedback.",
     });
   }
 });
