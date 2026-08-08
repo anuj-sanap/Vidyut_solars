@@ -17,13 +17,23 @@ const PORT = process.env.PORT || 3000;
 const ownerPanelKey = process.env.OWNER_PANEL_KEY || "";
 const mongoUri = process.env.MONGODB_URI || "";
 const jwtSecret = process.env.JWT_SECRET || crypto.randomBytes(32).toString("hex");
-const adminEmail = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
-const adminPassword = process.env.ADMIN_PASSWORD || "";
+const adminEmail = normalizeEmail(process.env.ADMIN_EMAIL || "admin@vidyutsolar.in");
+const adminPassword = process.env.ADMIN_PASSWORD || "VidyutAdmin@2026";
 const uploadsDir = path.join(__dirname, "uploads");
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
   .split(",")
   .map((origin) => origin.trim())
+  .concat([
+    "https://vidyutsolar.in",
+    "https://www.vidyutsolar.in",
+    "https://vidyut-solar-electricals.onrender.com",
+    "https://vidyut-solar-electricals-1.onrender.com",
+    "http://localhost:3000",
+    "http://localhost",
+  ])
   .filter(Boolean);
+
+const uniqueAllowedOrigins = [...new Set(allowedOrigins)];
 
 const imageMimeToExtension = new Map([
   ["image/jpeg", "jpg"],
@@ -590,7 +600,7 @@ app.set("trust proxy", 1);
 app.use(
   cors({
     origin(origin, cb) {
-      if (!origin || !allowedOrigins.length || allowedOrigins.includes(origin)) return cb(null, true);
+      if (!origin || !uniqueAllowedOrigins.length || uniqueAllowedOrigins.includes(origin)) return cb(null, true);
       return cb(new Error("Origin is not allowed by CORS."));
     },
   }),
