@@ -144,4 +144,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   ensureLightbox();
   attachLightboxEvents();
   await loadProjects();
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === "vidyut-projects-refresh") {
+      loadProjects();
+    }
+  });
 });

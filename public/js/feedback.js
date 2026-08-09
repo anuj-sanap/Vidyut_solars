@@ -1,3 +1,12 @@
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 async function loadFeedbackCards() {
   const holder = document.querySelector("#feedbackCards");
   const moreBtn = document.querySelector("#feedbackMoreBtn");
@@ -85,7 +94,17 @@ function setupFeedbackMoreButton() {
   });
 }
 
+function refreshFeedbackFromApi() {
+  return loadFeedbackCards();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   setupFeedbackMoreButton();
   loadFeedbackCards();
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === "vidyut-feedback-refresh") {
+      refreshFeedbackFromApi();
+    }
+  });
 });

@@ -11,6 +11,14 @@ function getOwnerKey() {
   return window.VidyutAuth?.getToken?.() || "";
 }
 
+function notifyPublicRefresh(storageKey) {
+  try {
+    window.localStorage.setItem(storageKey, String(Date.now()));
+  } catch (_) {
+    // Ignore localStorage permission issues; the API remains source of truth.
+  }
+}
+
 async function parseApiResponse(res) {
   let data = null;
   try {
@@ -134,6 +142,7 @@ function renderFeedbackAdmin(items) {
           headers: { Authorization: `Bearer ${key}` },
         });
         await parseApiResponse(res);
+        notifyPublicRefresh("vidyut-feedback-refresh");
         await loadFeedbackAdmin();
       } catch (error) {
         const status = document.querySelector("#feedbackAdminStatus");
@@ -199,6 +208,7 @@ async function updateProject(event) {
     await parseApiResponse(res);
     status.textContent = "Project updated.";
     status.className = "owner-item-status text-xs text-primary";
+    notifyPublicRefresh("vidyut-projects-refresh");
     await loadOwnerProjects();
   } catch (error) {
     status.textContent = error.message || "Update failed.";
@@ -224,6 +234,7 @@ async function deleteProject(form) {
       headers: { Authorization: `Bearer ${key}` },
     });
     await parseApiResponse(res);
+    notifyPublicRefresh("vidyut-projects-refresh");
     await loadOwnerProjects();
   } catch (error) {
     status.textContent = error.message || "Delete failed.";
@@ -270,6 +281,7 @@ async function uploadProject(event) {
     form.reset();
     status.textContent = "Project uploaded successfully.";
     status.className = "text-sm text-primary";
+    notifyPublicRefresh("vidyut-projects-refresh");
     await loadOwnerProjects();
   } catch (error) {
     status.textContent = error.message || "Upload failed.";
@@ -314,99 +326,16 @@ async function addFeedback(event) {
       status.className = "text-sm text-primary";
     }
 
+    notifyPublicRefresh("vidyut-feedback-refresh");
+
     form.reset();
     await loadFeedbackAdmin();
-    await loadFeedbackHomepage();
   } catch (error) {
     if (status) {
       status.textContent = error.message || "Unable to add feedback.";
       status.className = "text-sm text-destructive";
     }
   }
-}
-
-async function loadFeedbackHomepage() {
-  try {
-    const res = await fetch("/api/feedback");
-    const data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.message || "Unable to load feedback.");
-
-    const items = Array.isArray(data.feedback) ? data.feedback : [];
-    const holder = document.querySelector("#feedbackCards");
-    if (!holder) return;
-
-    if (!items.length) {
-      holder.innerHTML = `<article class="feedback-card"><div class="feedback-text">No customer feedback yet.</div></article>`;
-      return;
-    }
-
-    const firstItems = items.slice(0, 3);
-    holder.innerHTML = firstItems
-      .map(
-        (item) => `<article class="feedback-card" data-reveal>
-          <div class="feedback-quote">“</div>
-          <p class="feedback-text">${escapeHtml(item.quote || "")}</p>
-          <div class="feedback-author-row">
-            <span class="feedback-avatar">👤</span>
-            <div>
-              <div class="feedback-author">${escapeHtml(item.name || "Customer")}</div>
-              <div class="feedback-location">📍 ${escapeHtml(item.location || "Nashik")}</div>
-            </div>
-            <div class="star-row">★★★★★</div>
-          </div>
-        </article>`,
-      )
-      .join("");
-  } catch (_) {
-    const holder = document.querySelector("#feedbackCards");
-    if (holder) {
-      holder.innerHTML = `<article class="feedback-card"><div class="feedback-text">No customer feedback yet.</div></article>`;
-    }
-  }
-}
-
-async function setupFeedbackMoreButton() {
-  const moreBtn = document.querySelector("#feedbackMoreBtn");
-  if (!moreBtn) return;
-
-  moreBtn.addEventListener("click", async () => {
-    try {
-      const res = await fetch("/api/feedback");
-      const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.message || "Unable to load feedback.");
-
-      const items = Array.isArray(data.feedback) ? data.feedback : [];
-      const holder = document.querySelector("#feedbackCards");
-      if (!holder) return;
-
-      if (!items.length) {
-        holder.innerHTML = `<article class="feedback-card"><div class="feedback-text">No customer feedback yet.</div></article>`;
-        return;
-      }
-
-      holder.innerHTML = items
-        .map(
-          (item) => `<article class="feedback-card" data-reveal>
-            <div class="feedback-quote">“</div>
-            <p class="feedback-text">${escapeHtml(item.quote || "")}</p>
-            <div class="feedback-author-row">
-              <span class="feedback-avatar">👤</span>
-              <div>
-                <div class="feedback-author">${escapeHtml(item.name || "Customer")}</div>
-                <div class="feedback-location">📍 ${escapeHtml(item.location || "Nashik")}</div>
-              </div>
-              <div class="star-row">★★★★★</div>
-            </div>
-          </article>`,
-        )
-        .join("");
-
-      moreBtn.textContent = "More Closed";
-      moreBtn.disabled = true;
-    } catch (_) {
-      moreBtn.textContent = "Unable to load";
-    }
-  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -421,6 +350,3 @@ document.addEventListener("DOMContentLoaded", () => {
   loadOwnerProjects();
   loadFeedbackAdmin();
 });
-
-loadFeedbackHomepage();
-setupFeedbackMoreButton();

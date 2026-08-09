@@ -1,0 +1,33 @@
+---
+description: Admin-added feedback and projects must appear on public pages
+globs: public/js/{feedback,projects,owner-projects}.js,public/{index,projects,owner-projects}.html,server.js
+alwaysApply: false
+---
+
+# Admin Content Sync
+
+When an admin adds or edits content from `owner-projects.html`, it must appear on the matching public page via the API.
+
+## Data flow
+
+- **Feedback**: admin POST `/api/admin/feedback` → public GET `/api/feedback` → render in `#feedbackCards` on `index.html` via `feedback.js`
+- **Projects**: admin POST `/api/admin/projects` → public GET `/api/projects` → render in `#projectsGrid` on `projects.html` via `projects.js`
+
+## Rules
+
+- Public pages always load from the API; never rely on hardcoded placeholder cards in HTML.
+- After admin create/update/delete, call `notifyPublicRefresh("vidyut-feedback-refresh")` or `notifyPublicRefresh("vidyut-projects-refresh")` so open public tabs reload.
+- `feedback.js` and `projects.js` must define `escapeHtml` before rendering API data.
+- Do not duplicate public render logic inside `owner-projects.js`; keep admin page focused on forms and admin lists.
+
+## Example
+
+```javascript
+// owner-projects.js — after successful admin write
+notifyPublicRefresh("vidyut-feedback-refresh");
+
+// feedback.js — homepage listens and reloads
+window.addEventListener("storage", (event) => {
+  if (event.key === "vidyut-feedback-refresh") loadFeedbackCards();
+});
+```
