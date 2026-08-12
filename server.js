@@ -45,18 +45,30 @@ if (!process.env.JWT_SECRET) {
   console.warn("JWT_SECRET is not set. Tokens will reset whenever the server restarts.");
 }
 
-const FIXED_PLANS = [
-  { systemSize: 10, unitsLabel: "1000-1,100", unitsRange: [1000, 1100], billLabel: "10,000-11,000", billRange: [10000, 11000], jagaLabel: "500-600 sq.ft", jagaRange: [500, 600], costLabel: "6,60,000", monthlySavingLabel: "9,900-10,900" },
-  { systemSize: 9, unitsLabel: "900-1,000", unitsRange: [900, 1000], billLabel: "9,000-10,000", billRange: [9000, 10000], jagaLabel: "500-600 sq.ft", jagaRange: [500, 600], costLabel: "6,00,000", monthlySavingLabel: "8,900-9,900" },
-  { systemSize: 8, unitsLabel: "800-900", unitsRange: [800, 900], billLabel: "8,000-9,000", billRange: [8000, 9000], jagaLabel: "450-500 sq.ft", jagaRange: [450, 500], costLabel: "5,40,000", monthlySavingLabel: "7,900-8,900" },
-  { systemSize: 7, unitsLabel: "700-800", unitsRange: [700, 800], billLabel: "7,000-8,000", billRange: [7000, 8000], jagaLabel: "400-450 sq.ft", jagaRange: [400, 450], costLabel: "4,60,000", monthlySavingLabel: "6,900-7,900" },
-  { systemSize: 6, unitsLabel: "600-700", unitsRange: [600, 700], billLabel: "6,000-7,000", billRange: [6000, 7000], jagaLabel: "350-400 sq.ft", jagaRange: [350, 400], costLabel: "4,00,000", monthlySavingLabel: "5,900-6,900" },
-  { systemSize: 5, unitsLabel: "500-600", unitsRange: [500, 600], billLabel: "5,000-6,000", billRange: [5000, 6000], jagaLabel: "300-350 sq.ft", jagaRange: [300, 350], costLabel: "3,40,000", monthlySavingLabel: "4,900-6,900" },
-  { systemSize: 4, unitsLabel: "400-560", unitsRange: [400, 560], billLabel: "3,500-4,500", billRange: [3500, 4500], jagaLabel: "200-250 sq.ft", jagaRange: [200, 250], costLabel: "2,80,000", monthlySavingLabel: "3,400-3,400" },
-  { systemSize: 3, unitsLabel: "300-420", unitsRange: [300, 420], billLabel: "2,000-3,000", billRange: [2000, 3000], jagaLabel: "150-200 sq.ft", jagaRange: [150, 200], costLabel: "2,20,000", monthlySavingLabel: "1,900-2,900" },
-  { systemSize: 2, unitsLabel: "240-280", unitsRange: [240, 280], billLabel: "1,200-1,800", billRange: [1200, 1800], jagaLabel: "100-130 sq.ft", jagaRange: [100, 130], costLabel: "1,40,000", monthlySavingLabel: "1,000-1,700" },
-  { systemSize: 1, unitsLabel: "100-120", unitsRange: [100, 120], billLabel: "450-600", billRange: [450, 600], jagaLabel: "70-100 sq.ft", jagaRange: [70, 100], costLabel: "70,000", monthlySavingLabel: "600-900" },
-];
+const SOLAR_CATALOG = (() => {
+  const catalogPath = path.join(__dirname, "data", "solar-plans.json");
+  const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
+  const plans = (catalog.plans || []).map((plan) => ({
+    ...plan,
+    systemSize: Number(plan.systemSize),
+    monthlyGeneration: Number(plan.monthlyGeneration || 0),
+    roofRequirement: Number(plan.roofRequirement || 0),
+    cost: Number(plan.cost || 0),
+    monthlySaving: Number(plan.monthlySaving || 0),
+    annualSaving: Number(plan.annualSaving || 0),
+    panels: plan.panels || "",
+    inverter: plan.inverter || "",
+    payback: plan.payback || "",
+    co2Reduction: plan.co2Reduction || "",
+  }));
+
+  return {
+    plans,
+    assumptions: catalog.assumptions || {},
+  };
+})();
+
+const FIXED_PLANS = SOLAR_CATALOG.plans;
 
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
@@ -227,30 +239,86 @@ function valueDistance(value, [min, max]) {
   return 0;
 }
 
-function findBestPlan(plotSize, bill) {
-  let bestPlan = FIXED_PLANS[0];
-  let bestScore = Number.POSITIVE_INFINITY;
-
-  for (const plan of FIXED_PLANS) {
-    const billDistance = valueDistance(bill, plan.billRange);
-    const jagaDistance = valueDistance(plotSize, plan.jagaRange);
-    const score =
-      billDistance * 2 +
-      jagaDistance +
-      Math.abs(bill - midpoint(plan.billRange)) * 0.05 +
-      Math.abs(plotSize - midpoint(plan.jagaRange)) * 0.05;
-
-    if (score < bestScore) {
-      bestScore = score;
-      bestPlan = plan;
-    }
-  }
-
-  return bestPlan;
+function findPlanBySystemSize(systemSize) {
+  return FIXED_PLANS.find((plan) => Number(plan.systemSize) === Number(systemSize)) || null;
 }
 
-function findPlanBySystemSize(systemSize) {
-  return FIXED_PLANS.find((plan) => plan.systemSize === systemSize) || null;
+function estimateBillToConsumption(bill, assumptions = {}) {
+  const tariffPerUnit = Number(assumptions.tariffPerUnit || assumptions.unitRate || 8);
+  const billAmount = Number(bill || 0);
+  if (!billAmount || billAmount < 0) return 0;
+  return Math.round(billAmount / tariffPerUnit);
+}
+
+function estimateRequiredCapacityKw(bill, assumptions = {}) {
+  const monthlyUnits = estimateBillToConsumption(bill, assumptions);
+  const generationPerKw = Number(
+    assumptions.monthlyGenerationPerKw ||
+      assumptions.generationPerKw ||
+      assumptions.generationFactor ||
+      120,
+  );
+  if (!monthlyUnits || !generationPerKw) return 0;
+  return Math.max(1, Math.ceil(monthlyUnits / generationPerKw));
+}
+
+function buildBestPlan(roofArea, bill, selectedSystemSize = null) {
+  const assumptions = SOLAR_CATALOG.assumptions || {};
+  const plans = FIXED_PLANS;
+
+  if (selectedSystemSize) {
+    const selectedPlan = findPlanBySystemSize(selectedSystemSize);
+    if (!selectedPlan) {
+      return {
+        success: false,
+        message: `Selected system size ${selectedSystemSize} kW is not available in the current solar plan catalogue.`,
+      };
+    }
+
+    if (Number(selectedPlan.roofRequirement) > Number(roofArea)) {
+      return {
+        success: false,
+        code: "ROOF_SPACE_TOO_SMALL",
+        message: `The selected ${selectedPlan.systemSize} kW plan requires ${selectedPlan.roofRequirement} sq.ft and exceeds the available roof area of ${roofArea} sq.ft.`,
+      };
+    }
+
+    return {
+      success: true,
+      plan: selectedPlan,
+      recommended: selectedPlan,
+    };
+  }
+
+  const consumption = estimateBillToConsumption(bill, assumptions);
+  const requiredCapacity = estimateRequiredCapacityKw(bill, assumptions);
+  const eligiblePlans = plans.filter((plan) => Number(plan.roofRequirement) <= Number(roofArea));
+
+  if (!eligiblePlans.length) {
+    const smallestPlan = plans[0] || null;
+    return {
+      success: false,
+      code: "INSUFFICIENT_ROOF",
+      message: `The available roof area of ${roofArea} sq.ft is too small for the smallest supported plan (${smallestPlan ? `${smallestPlan.roofRequirement} sq.ft` : "unknown"}).`,
+      requiredCapacity,
+      consumption,
+      maxRoofSystem: null,
+    };
+  }
+
+  const sorted = eligiblePlans.slice().sort((a, b) => a.systemSize - b.systemSize);
+  const roofMaxPlan = sorted[sorted.length - 1];
+  const candidatePlans = sorted.filter((plan) => Number(plan.systemSize) >= Number(requiredCapacity));
+  const desiredPlan = candidatePlans[0] || roofMaxPlan;
+
+  return {
+    success: true,
+    plan: desiredPlan,
+    recommended: desiredPlan,
+    requiredCapacity,
+    consumption,
+    maxRoofSystem: roofMaxPlan,
+  };
 }
 
 function imageExtensionFor(file) {
@@ -752,26 +820,69 @@ app.get("/api/auth/me", requireAuth, (req, res) => {
 });
 
 app.post("/api/calculator", requireAuth, (req, res) => {
-  const plotSize = Number(req.body?.plotSize);
-  const bill = Number(req.body?.bill);
-  const selectedSystemSize = Number(req.body?.systemSize);
+  const roofArea = Number(req.body?.availableRoofArea ?? req.body?.plotSize ?? req.body?.roofArea);
+  const bill = Number(req.body?.monthlyBill ?? req.body?.bill);
+  const selectedSystemSizeRaw = req.body?.systemSize;
+  const selectedSystemSize = selectedSystemSizeRaw === "" || selectedSystemSizeRaw === undefined || selectedSystemSizeRaw === null
+    ? null
+    : Number(selectedSystemSizeRaw);
 
-  if (!plotSize || !bill || plotSize < 70 || bill < 450) {
+  const minRoofArea = Number(SOLAR_CATALOG.assumptions?.minimumRoofArea || 70);
+  const minBill = Number(SOLAR_CATALOG.assumptions?.minimumBill || 450);
+
+  if (!roofArea || !bill || roofArea < minRoofArea || bill < minBill) {
     return res.status(400).json({
       success: false,
-      message: "Please enter valid values (plot size >= 70 sq ft and bill >= Rs 450).",
+      message: `Please enter valid values (available roof area >= ${minRoofArea} sq ft and monthly bill >= Rs ${minBill}).`,
     });
   }
 
-  const selectedPlan = selectedSystemSize ? findPlanBySystemSize(selectedSystemSize) : null;
-  const matchedPlan = selectedPlan || findBestPlan(plotSize, bill);
+  if (selectedSystemSize && (!Number.isInteger(selectedSystemSize) || selectedSystemSize < 1 || selectedSystemSize > 20)) {
+    return res.status(400).json({
+      success: false,
+      message: "Please choose a supported system size from 1 kW to 20 kW.",
+    });
+  }
+
+  const recommendation = buildBestPlan(roofArea, bill, selectedSystemSize);
+
+  if (!recommendation.success) {
+    const status = recommendation.code === "ROOF_SPACE_TOO_SMALL" ? 422 : 400;
+    return res.status(status).json({
+      success: false,
+      message: recommendation.message,
+    });
+  }
+
+  const selectedPlan = recommendation.plan;
+  const estimatedConsumption = estimateBillToConsumption(bill, SOLAR_CATALOG.assumptions);
+  const requiredCapacity = estimateRequiredCapacityKw(bill, SOLAR_CATALOG.assumptions);
+  const eligiblePlans = FIXED_PLANS.filter((plan) => Number(plan.roofRequirement) <= Number(roofArea));
+  const maxRoofPlan = eligiblePlans.length ? eligiblePlans.reduce((max, plan) => Number(plan.systemSize) > Number(max.systemSize) ? plan : max, eligiblePlans[0]) : null;
+
   return res.json({
     success: true,
     result: {
-      plotSize,
-      bill,
-      selectedSystemSize: selectedPlan ? selectedSystemSize : "",
-      ...matchedPlan,
+      availableRoofArea: roofArea,
+      monthlyBill: bill,
+      estimatedConsumption,
+      requiredCapacity,
+      capacityDemand: requiredCapacity,
+      selectedSystemSize: selectedPlan?.systemSize || "",
+      maxRoofSystem: maxRoofPlan?.systemSize || null,
+      maxRoofArea: maxRoofPlan?.roofRequirement || null,
+      bestPlan: selectedPlan.systemSize,
+      roofFits: selectedPlan.roofRequirement <= roofArea,
+      plan: selectedPlan,
+      plans: FIXED_PLANS,
+      assumptions: SOLAR_CATALOG.assumptions,
+      billingRange: selectedPlan.billRange || null,
+      unitsRange: selectedPlan.unitsRange || null,
+      roofRange: selectedPlan.roofRange || null,
+      identity: {
+        monthlyUnits: `${selectedPlan.unitsRange ? selectedPlan.unitsRange[0] : estimatedConsumption}-${selectedPlan.unitsRange ? selectedPlan.unitsRange[1] : estimatedConsumption}`,
+      },
+      ...selectedPlan,
     },
   });
 });

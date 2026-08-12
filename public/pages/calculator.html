@@ -31,15 +31,25 @@
       <section class="mt-8 grid gap-8 md:grid-cols-2">
         <div class="theme-card-shadow" data-reveal>
           <h2 class="font-display text-xl text-foreground">Enter Your Details</h2>
-          <p class="mt-2 text-xs text-muted-foreground">Use monthly bill and available space to match the nearest fixed solar plan.</p>
+          <p class="mt-2 text-xs text-muted-foreground">Use monthly bill and available roof area to match a suitable solar plan.</p>
           <form id="solarCalculatorForm" class="mt-4 grid gap-4">
-            <label class="text-sm font-medium text-foreground" for="calc-plot">Plot Size (sq ft)</label>
-            <input id="calc-plot" name="plotSize" type="number" min="70" required placeholder="Plot Size (sq.ft)" class="input-field" />
-            <label class="text-sm font-medium text-foreground" for="calc-bill">Monthly Electricity Bill (Rs)</label>
-            <input id="calc-bill" name="bill" type="number" min="450" required placeholder="Monthly Electricity Bill (Rs)" class="input-field" />
+            <label class="text-sm font-medium text-foreground" for="calc-roof">Available Roof Area (sq.ft)</label>
+            <input id="calc-roof" name="availableRoofArea" type="number" min="70" required placeholder="Available Roof Area (sq.ft)" class="input-field" />
+            <label class="text-sm font-medium text-foreground" for="calc-bill">Monthly Electricity Bill (₹)</label>
+            <input id="calc-bill" name="monthlyBill" type="number" min="450" required placeholder="Monthly Electricity Bill (₹)" class="input-field" />
             <label class="text-sm font-medium text-foreground" for="calc-system-size">Select System Size (Optional)</label>
             <select id="calc-system-size" name="systemSize" class="input-field">
-              <option value="">Auto match from bill + jaga</option>
+              <option value="">Auto match from bill + roof area</option>
+              <option value="20">20 kW</option>
+              <option value="19">19 kW</option>
+              <option value="18">18 kW</option>
+              <option value="17">17 kW</option>
+              <option value="16">16 kW</option>
+              <option value="15">15 kW</option>
+              <option value="14">14 kW</option>
+              <option value="13">13 kW</option>
+              <option value="12">12 kW</option>
+              <option value="11">11 kW</option>
               <option value="10">10 kW</option>
               <option value="9">9 kW</option>
               <option value="8">8 kW</option>
@@ -61,11 +71,19 @@
           <h2 class="font-display text-xl text-foreground">Your Estimated Results</h2>
           <div class="mt-4 grid gap-3 text-sm">
             <div class="rounded-md bg-muted p-3"><strong>Recommended System Size:</strong> <span id="resultSystemSize"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Monthly Units:</strong> <span id="resultMonthlyUnits"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Bill Without Solar:</strong> <span id="resultBillWithoutSolar"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Jaga (Space):</strong> <span id="resultJaga"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Monthly Generation:</strong> <span id="resultMonthlyGeneration"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Monthly Consumption Estimate:</strong> <span id="resultEstimatedConsumption"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Required Capacity:</strong> <span id="resultRequiredCapacity"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Roof Requirement:</strong> <span id="resultRoofRequirement"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Available Roof Area:</strong> <span id="resultAvailableRoofArea"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Maximum Fit In Roof:</strong> <span id="resultMaximumFit"></span></div>
             <div class="rounded-md bg-muted p-3"><strong>Estimate Cost:</strong> <span id="resultCost"></span></div>
             <div class="rounded-md bg-muted p-3"><strong>Monthly Saving:</strong> <span id="resultSavings"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Annual Saving:</strong> <span id="resultAnnualSaving"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Panels:</strong> <span id="resultPanels"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Inverter:</strong> <span id="resultInverter"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>Payback:</strong> <span id="resultPayback"></span></div>
+            <div class="rounded-md bg-muted p-3"><strong>CO₂ Reduction:</strong> <span id="resultCo2Reduction"></span></div>
           </div>
           <div class="mt-5 flex flex-wrap gap-3">
             <a id="whatsappWithResults" target="_blank" rel="noopener" href="https://wa.me/917558200928?text=Hi%20Vidyut%20PowerTech%2C%20I%20want%20a%20solar%20installation%20quote%20in%20Nashik" class="btn-primary px-4 py-3">WhatsApp with Results</a>

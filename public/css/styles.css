@@ -108,6 +108,34 @@
   border-color: #0B255A !important;
 }
 
+.service-call-now {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1;
+  border: 1px solid #FFD23F;
+  background-color: #FFD23F;
+  color: #0B255A !important;
+  text-decoration: none;
+}
+
+.service-call-now:hover,
+.service-call-now:focus {
+  background-color: #FFA500;
+  border-color: #FFA500;
+  color: #0B255A !important;
+}
+
+.section-cta .service-call-now {
+  background-color: #FFD23F !important;
+  border-color: #FFD23F !important;
+  color: #0B255A !important;
+}
+
 h1,
 h2,
 h3,
