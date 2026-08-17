@@ -86,8 +86,8 @@ if (hasCloudinaryConfig) {
 }
 
 const VISITOR_ALERT_EMAILS = [
-  "sanapanuj7@gmail.com",
-  "vidyutsolarelectricals@gmail.com",
+  "anujsanap7@gmail.com",
+  "bhushanbagul928@gmail.com",
 ];
 const LEAD_ALERT_EMAILS = VISITOR_ALERT_EMAILS;
 
