@@ -1,7 +1,7 @@
 node_modules/
 uploads/
 data/leads.json
-
+Vidyut_solars/tmp-admin-login.json
 .env
 .env.*
 !.env.example
