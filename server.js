@@ -11,6 +11,7 @@ const crypto = require("crypto");
 const { PassThrough } = require("stream");
 const mongoose = require("mongoose");
 const { v2: cloudinary } = require("cloudinary");
+const { resolvePinCode, calculateSolarEstimate } = require("./scripts/solar-calculator-engine");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -819,72 +820,126 @@ app.get("/api/auth/me", requireAuth, (req, res) => {
   return res.json({ success: true, user: publicUser(req.user) });
 });
 
-app.post("/api/calculator", requireAuth, (req, res) => {
-  const roofArea = Number(req.body?.availableRoofArea ?? req.body?.plotSize ?? req.body?.roofArea);
-  const bill = Number(req.body?.monthlyBill ?? req.body?.bill);
-  const selectedSystemSizeRaw = req.body?.systemSize;
-  const selectedSystemSize = selectedSystemSizeRaw === "" || selectedSystemSizeRaw === undefined || selectedSystemSizeRaw === null
-    ? null
-    : Number(selectedSystemSizeRaw);
+// ----------------------------------------------------------------------------
+// Solar Calculator API Endpoints
+// ----------------------------------------------------------------------------
 
-  const minRoofArea = Number(SOLAR_CATALOG.assumptions?.minimumRoofArea || 70);
-  const minBill = Number(SOLAR_CATALOG.assumptions?.minimumBill || 450);
-
-  if (!roofArea || !bill || roofArea < minRoofArea || bill < minBill) {
-    return res.status(400).json({
-      success: false,
-      message: `Please enter valid values (available roof area >= ${minRoofArea} sq ft and monthly bill >= Rs ${minBill}).`,
-    });
+app.get("/api/calculator/pincode", async (req, res) => {
+  try {
+    const pinCode = String(req.query?.code || "").trim();
+    if (!pinCode || pinCode.length !== 6 || !/^\d{6}$/.test(pinCode)) {
+      return res.status(400).json({ success: false, message: "Enter a valid 6-digit PIN code." });
+    }
+    const resolved = await resolvePinCode(pinCode);
+    if (!resolved) {
+      return res.status(404).json({ success: false, message: "PIN code solar data not found." });
+    }
+    return res.json({ success: true, location: resolved });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "PIN lookup failed." });
   }
+});
 
-  if (selectedSystemSize && (!Number.isInteger(selectedSystemSize) || selectedSystemSize < 1 || selectedSystemSize > 20)) {
-    return res.status(400).json({
-      success: false,
-      message: "Please choose a supported system size from 1 kW to 20 kW.",
-    });
-  }
+app.post("/api/calculator", async (req, res) => {
+  try {
+    const input = {
+      pinCode: String(req.body?.pinCode || "").trim(),
+      customerType: req.body?.customerType || 'residential',
+      billMode: req.body?.billMode || (req.body?.monthlyUnits ? 'units' : 'bill'),
+      monthlyBill: Number(req.body?.monthlyBill ?? req.body?.bill ?? 0),
+      monthlyUnits: Number(req.body?.monthlyUnits ?? req.body?.units ?? 0),
+      roofArea: Number(req.body?.roofArea ?? req.body?.availableRoofArea ?? req.body?.plotSize ?? 0),
+      roofAreaUnknown: Boolean(req.body?.roofAreaUnknown),
+      systemSize: req.body?.systemSize || req.body?.selectedSystemSize || "",
+      loanTenureMonths: Number(req.body?.loanTenureMonths || 36),
+    };
 
-  const recommendation = buildBestPlan(roofArea, bill, selectedSystemSize);
+    const output = await calculateSolarEstimate(input);
 
-  if (!recommendation.success) {
-    const status = recommendation.code === "ROOF_SPACE_TOO_SMALL" ? 422 : 400;
-    return res.status(status).json({
-      success: false,
-      message: recommendation.message,
-    });
-  }
+    const selectedPlan = {
+      systemSize: output.solar.recommendedKw,
+      cost: output.financial.grossCost,
+      monthlySaving: output.financial.monthlySavings,
+      annualSaving: output.financial.annualSavings,
+      roofRequirement: output.solar.estimatedRoofAreaSqft,
+      panels: `${output.solar.panelCount} × ${output.solar.panelWattage}W`,
+      inverter: `${output.solar.recommendedKw} kW Grid Inverter`,
+      payback: `${output.financial.paybackYears} years`,
+      co2Reduction: `${output.environmental.co2AvoidedTonnesAnnual} tonnes/year`,
+    };
 
-  const selectedPlan = recommendation.plan;
-  const estimatedConsumption = estimateBillToConsumption(bill, SOLAR_CATALOG.assumptions);
-  const requiredCapacity = estimateRequiredCapacityKw(bill, SOLAR_CATALOG.assumptions);
-  const eligiblePlans = FIXED_PLANS.filter((plan) => Number(plan.roofRequirement) <= Number(roofArea));
-  const maxRoofPlan = eligiblePlans.length ? eligiblePlans.reduce((max, plan) => Number(plan.systemSize) > Number(max.systemSize) ? plan : max, eligiblePlans[0]) : null;
-
-  return res.json({
-    success: true,
-    result: {
-      availableRoofArea: roofArea,
-      monthlyBill: bill,
-      estimatedConsumption,
-      requiredCapacity,
-      capacityDemand: requiredCapacity,
-      selectedSystemSize: selectedPlan?.systemSize || "",
-      maxRoofSystem: maxRoofPlan?.systemSize || null,
-      maxRoofArea: maxRoofPlan?.roofRequirement || null,
-      bestPlan: selectedPlan.systemSize,
-      roofFits: selectedPlan.roofRequirement <= roofArea,
-      plan: selectedPlan,
-      plans: FIXED_PLANS,
-      assumptions: SOLAR_CATALOG.assumptions,
-      billingRange: selectedPlan.billRange || null,
-      unitsRange: selectedPlan.unitsRange || null,
-      roofRange: selectedPlan.roofRange || null,
-      identity: {
-        monthlyUnits: `${selectedPlan.unitsRange ? selectedPlan.unitsRange[0] : estimatedConsumption}-${selectedPlan.unitsRange ? selectedPlan.unitsRange[1] : estimatedConsumption}`,
+    return res.json({
+      success: true,
+      data: output,
+      result: {
+        availableRoofArea: input.roofArea || output.solar.estimatedRoofAreaSqft,
+        monthlyBill: input.monthlyBill || 0,
+        estimatedConsumption: output.electricity.monthlyUnitsEstimated,
+        requiredCapacity: output.solar.requiredKwRaw,
+        capacityDemand: output.solar.requiredKwRaw,
+        selectedSystemSize: output.solar.recommendedKw,
+        maxRoofSystem: output.solar.recommendedKw,
+        maxRoofArea: output.solar.estimatedRoofAreaSqft,
+        bestPlan: output.solar.recommendedKw,
+        roofFits: output.solar.roofAreaSufficient !== false,
+        plan: selectedPlan,
+        plans: [selectedPlan],
+        ...selectedPlan,
       },
-      ...selectedPlan,
-    },
-  });
+    });
+  } catch (err) {
+    const message = err && err.message ? err.message : 'Calculation error';
+    return res.status(400).json({ success: false, message });
+  }
+});
+
+app.post("/api/calculator/lead", leadRateLimit, async (req, res) => {
+  try {
+    const name = String(req.body?.name || "").trim();
+    const phone = String(req.body?.phone || "").trim();
+    const email = String(req.body?.email || "").trim();
+    const pinCode = String(req.body?.pinCode || "").trim();
+    const contactMethod = String(req.body?.preferredContactMethod || "whatsapp").trim();
+    const calculation = req.body?.calculation || {};
+
+    if (!name || name.length < 2) {
+      return res.status(400).json({ success: false, message: "Full Name is required." });
+    }
+    if (!phone || !/^[0-9+ ]{10,15}$/.test(phone)) {
+      return res.status(400).json({ success: false, message: "Valid 10-digit phone number is required." });
+    }
+
+    const leadData = {
+      name,
+      phone,
+      email: email || undefined,
+      location: calculation?.location?.city ? `${calculation.location.city}, ${calculation.location.state} (${pinCode})` : pinCode || "Nashik",
+      plotSize: String(calculation?.solar?.estimatedRoofAreaSqft || req.body?.roofArea || "Standard"),
+      electricityBill: String(calculation?.financial?.monthlySavings || req.body?.monthlyBill || "Not specified"),
+      source: "solar-calculator-quote-modal",
+      preferredContactMethod: contactMethod,
+      recommendedKw: calculation?.solar?.recommendedKw,
+      netInvestment: calculation?.financial?.netInvestment,
+      annualSavings: calculation?.financial?.annualSavings,
+      status: "new",
+      createdAt: new Date().toISOString(),
+    };
+
+    if (Lead) {
+      const dbLead = new Lead(leadData);
+      await dbLead.save();
+    } else {
+      const fileLeads = readLeadsFromFile();
+      fileLeads.unshift({ id: String(Date.now()), ...leadData });
+      writeLeadsToFile(fileLeads);
+    }
+
+    sendLeadEmail({ lead: leadData, ip: clientIp(req), userAgent: req.headers["user-agent"] || "" }).catch(() => {});
+    return res.json({ success: true, message: "Quote request submitted successfully." });
+  } catch (error) {
+    logServerError("calculator-lead", error);
+    return res.status(500).json({ success: false, message: "Unable to submit quote request right now." });
+  }
 });
 
 app.post("/api/notify-visit", visitRateLimit, async (req, res) => {

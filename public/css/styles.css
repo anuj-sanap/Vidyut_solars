@@ -549,3 +549,14 @@ footer span {
     transform: scale(1);
   }
 }
+
+/* Solar Calculator Dynamic Results & Modal Enhancements */
+#savingsChartCanvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+#leadModal {
+  transition: opacity 0.25s ease;
+}
+

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Solar Calculator | Vidyut PowerTech</title>
-    <meta name="description" content="Estimate system size, cost, savings and payback with our solar calculator for Nashik properties." />
+    <meta name="description" content="Estimate system size, cost, savings, payback, and environmental impact with our solar calculator." />
     <meta name="keywords" content="Solar calculator Nashik, rooftop solar cost estimate, solar payback calculator" />
     <link rel="canonical" href="https://vidyutsolar.in/pages/calculator.html" />
     <meta property="og:type" content="website" />
@@ -14,88 +14,340 @@
     <meta property="og:image" content="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1800&q=80" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Solar Calculator | Vidyut PowerTech" />
-    <meta name="twitter:description" content="Use your bill and plot size to get a fast, indicative rooftop solar estimate for Nashik." />
+    <meta name="twitter:description" content="Use your PIN code and bill to get a fast, accurate rooftop solar estimate for India." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/css/tailwind.css" />
     <link rel="stylesheet" href="/css/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body data-page="calculator" class="bg-background font-sans text-foreground">
     <div id="navbar-root"></div>
 
-    <main class="mx-auto max-w-7xl px-4 py-14 md:px-6">
-      <h1 class="font-display text-4xl text-foreground md:text-5xl" data-reveal>Solar Calculator</h1>
-      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground" data-reveal>Get an instant estimate for solar panel installation in Nashik. Results are indicative and our team confirms final sizing after site visit.</p>
+    <main class="mx-auto max-w-7xl px-4 py-10 md:px-6 md:py-14">
+      <h1 class="font-display text-3xl text-foreground sm:text-4xl md:text-5xl" data-reveal>Solar Calculator</h1>
+      <p class="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base" data-reveal>
+        Calculate your required solar system size, installation cost, government subsidy, EMI, 25-year cumulative savings, and environmental benefits.
+      </p>
 
-      <section class="mt-8 grid gap-8 md:grid-cols-2">
-        <div class="theme-card-shadow" data-reveal>
-          <h2 class="font-display text-xl text-foreground">Enter Your Details</h2>
-          <p class="mt-2 text-xs text-muted-foreground">Use monthly bill and available roof area to match a suitable solar plan.</p>
-          <form id="solarCalculatorForm" class="mt-4 grid gap-4">
-            <label class="text-sm font-medium text-foreground" for="calc-roof">Available Roof Area (sq.ft)</label>
-            <input id="calc-roof" name="availableRoofArea" type="number" min="70" required placeholder="Available Roof Area (sq.ft)" class="input-field" />
-            <label class="text-sm font-medium text-foreground" for="calc-bill">Monthly Electricity Bill (₹)</label>
-            <input id="calc-bill" name="monthlyBill" type="number" min="450" required placeholder="Monthly Electricity Bill (₹)" class="input-field" />
-            <label class="text-sm font-medium text-foreground" for="calc-system-size">Select System Size (Optional)</label>
-            <select id="calc-system-size" name="systemSize" class="input-field">
-              <option value="">Auto match from bill + roof area</option>
-              <option value="20">20 kW</option>
-              <option value="19">19 kW</option>
-              <option value="18">18 kW</option>
-              <option value="17">17 kW</option>
-              <option value="16">16 kW</option>
-              <option value="15">15 kW</option>
-              <option value="14">14 kW</option>
-              <option value="13">13 kW</option>
-              <option value="12">12 kW</option>
-              <option value="11">11 kW</option>
-              <option value="10">10 kW</option>
-              <option value="9">9 kW</option>
-              <option value="8">8 kW</option>
-              <option value="7">7 kW</option>
-              <option value="6">6 kW</option>
-              <option value="5">5 kW</option>
-              <option value="4">4 kW</option>
-              <option value="3">3 kW</option>
-              <option value="2">2 kW</option>
-              <option value="1">1 kW</option>
-            </select>
-            <button type="submit" class="btn-primary w-full">Calculate</button>
-            <p id="calcFormStatus" class="text-sm text-destructive" aria-live="polite"></p>
-          </form>
+      <section class="mt-8 grid gap-8 lg:grid-cols-12">
+        <!-- FORM COLUMN -->
+        <div class="lg:col-span-5">
+          <div class="theme-card-shadow sticky top-24" data-reveal>
+            <h2 class="font-display text-xl text-foreground">Enter Your Details</h2>
+            <p class="mt-1 text-xs text-muted-foreground">Select your location PIN code and electricity usage below.</p>
+
+            <form id="solarCalculatorForm" class="mt-5 space-y-5">
+              <!-- PIN CODE -->
+              <div>
+                <label class="mb-1.5 flex items-center gap-1.5 text-sm font-semibold text-foreground" for="calc-pin">
+                  <span>📍</span> Enter your PIN code
+                </label>
+                <input
+                  id="calc-pin"
+                  name="pinCode"
+                  type="text"
+                  inputmode="numeric"
+                  pattern="^[0-9]{6}$"
+                  maxlength="6"
+                  required
+                  placeholder="e.g. 422001 or 411001"
+                  class="input-field text-base font-medium"
+                />
+                <div id="pinStatus" class="mt-1.5 min-h-[20px] text-xs"></div>
+              </div>
+
+              <!-- CUSTOMER TYPE TOGGLE -->
+              <div>
+                <span class="mb-1.5 block text-sm font-semibold text-foreground">Customer Type</span>
+                <div class="grid grid-cols-2 gap-2 rounded-lg bg-muted p-1 text-xs font-semibold">
+                  <button type="button" id="btnCustomerRes" class="rounded-md py-2 text-center transition bg-card text-primary shadow-sm">
+                    Residential
+                  </button>
+                  <button type="button" id="btnCustomerCom" class="rounded-md py-2 text-center transition text-muted-foreground hover:text-foreground">
+                    Commercial
+                  </button>
+                </div>
+                <input type="hidden" id="calc-customer-type" name="customerType" value="residential" />
+              </div>
+
+              <!-- BILL vs UNITS TOGGLE & INPUT -->
+              <div>
+                <div class="mb-1.5 flex items-center justify-between">
+                  <label id="lblBillOrUnits" class="text-sm font-semibold text-foreground" for="calc-bill-units">
+                    Average Monthly Electricity Bill (₹)
+                  </label>
+                  <button type="button" id="btnToggleBillMode" class="text-xs font-semibold text-primary underline underline-offset-2">
+                    Use kWh units instead
+                  </button>
+                </div>
+                <input type="hidden" id="calc-bill-mode" name="billMode" value="bill" />
+                <div class="relative">
+                  <span id="billPrefix" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-muted-foreground">₹</span>
+                  <input
+                    id="calc-bill-units"
+                    name="monthlyBill"
+                    type="number"
+                    min="100"
+                    required
+                    placeholder="4000"
+                    class="input-field pl-7 text-base font-medium"
+                  />
+                  <span id="unitsSuffix" class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-muted-foreground hidden">kWh</span>
+                </div>
+                <p id="billNote" class="mt-1 text-[11px] text-muted-foreground">
+                  Units consumed will be estimated based on regional DISCOM slab tariffs.
+                </p>
+              </div>
+
+              <!-- ROOF AREA INPUT -->
+              <div>
+                <label class="mb-1.5 flex items-center gap-1.5 text-sm font-semibold text-foreground" for="calc-roof">
+                  Available Shadow-Free Roof Area <span class="font-normal text-muted-foreground">(optional)</span>
+                </label>
+                <div class="relative">
+                  <input
+                    id="calc-roof"
+                    name="roofArea"
+                    type="number"
+                    min="50"
+                    placeholder="500"
+                    class="input-field pr-12 text-base font-medium"
+                  />
+                  <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-muted-foreground">sq.ft</span>
+                </div>
+                <label class="mt-2 flex cursor-pointer items-center gap-2 text-xs text-slate-600">
+                  <input type="checkbox" id="chkRoofUnknown" class="h-3.5 w-3.5 rounded accent-primary" />
+                  I don't know my roof area
+                </label>
+              </div>
+
+              <!-- SYSTEM SIZE OPTIONAL DROPDOWN -->
+              <div>
+                <label class="mb-1.5 block text-sm font-semibold text-foreground" for="calc-system-size">
+                  Select System Size <span class="font-normal text-muted-foreground">(optional)</span>
+                </label>
+                <select id="calc-system-size" name="systemSize" class="input-field text-sm">
+                  <option value="">Auto-match optimal capacity</option>
+                  <option value="1">1 kW</option>
+                  <option value="2">2 kW</option>
+                  <option value="3">3 kW</option>
+                  <option value="4">4 kW</option>
+                  <option value="5">5 kW</option>
+                  <option value="6">6 kW</option>
+                  <option value="7">7 kW</option>
+                  <option value="8">8 kW</option>
+                  <option value="9">9 kW</option>
+                  <option value="10">10 kW</option>
+                  <option value="12">12 kW</option>
+                  <option value="15">15 kW</option>
+                  <option value="20">20 kW</option>
+                </select>
+              </div>
+
+              <button type="submit" id="btnCalculate" class="btn-primary w-full py-3.5 text-base font-semibold shadow-md">
+                Calculate My Solar Savings
+              </button>
+              <p id="calcFormStatus" class="text-xs text-destructive" aria-live="polite"></p>
+            </form>
+          </div>
         </div>
 
-        <div id="calcResults" class="theme-card-shadow hidden" data-reveal>
-          <div class="label-micro mb-3 inline-block rounded-full bg-muted px-3 py-1" id="recommendedBadge">Recommended system</div>
-          <h2 class="font-display text-xl text-foreground">Your Estimated Results</h2>
-          <div class="mt-4 grid gap-3 text-sm">
-            <div class="rounded-md bg-muted p-3"><strong>Recommended System Size:</strong> <span id="resultSystemSize"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Monthly Generation:</strong> <span id="resultMonthlyGeneration"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Monthly Consumption Estimate:</strong> <span id="resultEstimatedConsumption"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Required Capacity:</strong> <span id="resultRequiredCapacity"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Roof Requirement:</strong> <span id="resultRoofRequirement"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Available Roof Area:</strong> <span id="resultAvailableRoofArea"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Maximum Fit In Roof:</strong> <span id="resultMaximumFit"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Estimate Cost:</strong> <span id="resultCost"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Monthly Saving:</strong> <span id="resultSavings"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Annual Saving:</strong> <span id="resultAnnualSaving"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Panels:</strong> <span id="resultPanels"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Inverter:</strong> <span id="resultInverter"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>Payback:</strong> <span id="resultPayback"></span></div>
-            <div class="rounded-md bg-muted p-3"><strong>CO₂ Reduction:</strong> <span id="resultCo2Reduction"></span></div>
+        <!-- RESULTS COLUMN -->
+        <div class="lg:col-span-7">
+          <!-- INITIAL PLACEHOLDER STATE -->
+          <div id="calcPlaceholder" class="theme-card-shadow flex flex-col items-center justify-center p-12 text-center" data-reveal>
+            <div class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-muted text-3xl">☀️</div>
+            <h3 class="font-display text-xl font-bold text-foreground">Your Results Will Appear Here</h3>
+            <p class="mt-2 max-w-sm text-xs leading-relaxed text-muted-foreground">
+              Enter your PIN code and monthly bill/consumption on the left to generate an instant estimate.
+            </p>
           </div>
-          <div class="mt-5 flex flex-wrap gap-3">
-            <a id="whatsappWithResults" target="_blank" rel="noopener" href="https://wa.me/917558200928?text=Hi%20Vidyut%20PowerTech%2C%20I%20want%20a%20solar%20installation%20quote%20in%20Nashik" class="btn-primary px-4 py-3">WhatsApp with Results</a>
-            <a href="/contact.html" class="btn-secondary px-4 py-3">Get Quote</a>
+
+          <!-- RESULTS CONTAINER -->
+          <div id="calcResults" class="hidden space-y-6" data-reveal>
+            <!-- RECOMMENDATION HERO CARD -->
+            <div class="overflow-hidden rounded-2xl bg-primary p-6 text-white shadow-xl sm:p-8">
+              <div class="flex items-center gap-2 text-xs font-semibold text-white/80">
+                <span>📍</span>
+                <span id="resLocationLabel">Nashik, Maharashtra &middot; MSEDCL</span>
+              </div>
+              <p class="mt-3 text-xs font-bold uppercase tracking-wider text-amber-300">Your Solar Recommendation</p>
+              <div class="mt-1 flex items-baseline gap-2">
+                <span id="resKwNumber" class="font-display text-5xl font-extrabold sm:text-6xl number-val">3</span>
+                <span class="font-display text-2xl font-bold text-white/90">kW</span>
+              </div>
+              <p class="mt-1 text-sm font-semibold text-white/80">Recommended Solar System</p>
+              <div class="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-white/20 pt-4 text-xs text-white/80">
+                <span id="resPanelInfo">6 &times; 550W solar panels</span>
+                <span id="resConsumptionInfo">Reported Consumption: 300 units/month</span>
+              </div>
+            </div>
+
+            <!-- WARNINGS BOX -->
+            <div id="resWarningBox" class="hidden rounded-xl border border-amber-300 bg-amber-50 p-4 text-xs text-amber-900">
+              ⚠️ <span id="resWarningText"></span>
+            </div>
+
+            <!-- QUICK STATS GRID -->
+            <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div class="theme-card-shadow p-4">
+                <div class="text-xs text-muted-foreground">Estimated Roof Area</div>
+                <div id="statRoofArea" class="mt-1 font-display text-lg font-bold text-foreground number-val">~210 sq.ft</div>
+              </div>
+              <div class="theme-card-shadow p-4">
+                <div class="text-xs text-muted-foreground">Annual Generation</div>
+                <div id="statAnnualGen" class="mt-1 font-display text-lg font-bold text-foreground number-val">4,380 kWh</div>
+              </div>
+              <div class="theme-card-shadow p-4">
+                <div class="text-xs text-muted-foreground">Annual Savings</div>
+                <div id="statAnnualSavings" class="mt-1 font-display text-lg font-bold text-emerald-700 number-val">₹32,850</div>
+              </div>
+              <div class="theme-card-shadow p-4">
+                <div class="text-xs text-muted-foreground">Monthly Savings</div>
+                <div id="statMonthlySavings" class="mt-1 font-display text-lg font-bold text-foreground number-val">₹2,738</div>
+              </div>
+            </div>
+
+            <!-- INVESTMENT SNAPSHOT CARD -->
+            <div class="theme-card-shadow p-6">
+              <h3 class="font-display text-lg font-bold text-foreground">Your Investment Snapshot</h3>
+              <p class="mt-0.5 text-xs text-muted-foreground">Estimated PM Surya Ghar government subsidy &amp; financial terms.</p>
+
+              <dl class="mt-4 divide-y divide-border text-sm">
+                <div class="flex items-center justify-between py-2.5">
+                  <dt class="text-muted-foreground">Gross System Cost</dt>
+                  <dd id="resGrossCost" class="font-semibold text-foreground number-val">₹1,81,000</dd>
+                </div>
+                <div class="flex items-center justify-between py-2.5">
+                  <dt class="text-muted-foreground">Government Subsidy</dt>
+                  <dd id="resSubsidy" class="font-semibold text-emerald-600 number-val">-₹78,000</dd>
+                </div>
+                <div class="flex items-center justify-between py-2.5">
+                  <dt class="font-bold text-foreground">Net Investment</dt>
+                  <dd id="resNetInvestment" class="font-display text-lg font-extrabold text-primary number-val">₹1,03,000</dd>
+                </div>
+                <div class="flex items-center justify-between py-2.5">
+                  <dt class="text-muted-foreground">Estimated EMI (36 Months)</dt>
+                  <dd id="resEmi" class="font-semibold text-foreground number-val">₹3,350/month</dd>
+                </div>
+                <div class="flex items-center justify-between py-2.5">
+                  <dt class="text-muted-foreground">Estimated Payback Period</dt>
+                  <dd id="resPayback" class="font-semibold text-foreground number-val">3.1 years</dd>
+                </div>
+              </dl>
+            </div>
+
+            <!-- 25-YEAR SAVINGS CHART CARD -->
+            <div class="theme-card-shadow p-6">
+              <div class="flex flex-wrap items-end justify-between gap-2">
+                <div>
+                  <h3 class="font-display text-lg font-bold text-foreground">Your 25-Year Cumulative Savings</h3>
+                  <p class="text-xs text-muted-foreground">Accounting for 0.7% panel output degradation &amp; 3% annual tariff inflation</p>
+                </div>
+                <div id="chartTotalSavings" class="font-display text-2xl font-extrabold text-emerald-700 number-val">₹12,45,000</div>
+              </div>
+              <div class="mt-4 h-64 w-full">
+                <canvas id="savingsChartCanvas"></canvas>
+              </div>
+            </div>
+
+            <!-- ENVIRONMENTAL IMPACT CARD -->
+            <div class="rounded-xl border border-emerald-200 bg-emerald-50/40 p-6">
+              <h3 class="font-display text-lg font-bold text-emerald-950">Your Environmental Impact</h3>
+              <p class="mt-0.5 text-xs text-emerald-800">Clean solar energy generation footprint</p>
+
+              <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                <div class="rounded-lg bg-white p-4 shadow-sm">
+                  <div class="text-xs font-medium text-emerald-800">Annual CO₂ Avoided</div>
+                  <div id="envCo2" class="mt-1 font-display text-lg font-bold text-emerald-900 number-val">3.1 tonnes</div>
+                </div>
+                <div class="rounded-lg bg-white p-4 shadow-sm">
+                  <div class="text-xs font-medium text-emerald-800">Equivalent Trees Planted</div>
+                  <div id="envTrees" class="mt-1 font-display text-lg font-bold text-emerald-900 number-val">148 trees</div>
+                </div>
+                <div class="rounded-lg bg-white p-4 shadow-sm">
+                  <div class="text-xs font-medium text-emerald-800">Vehicle Distance Avoided</div>
+                  <div id="envKm" class="mt-1 font-display text-lg font-bold text-emerald-900 number-val">25,833 km</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CTA BANNER -->
+            <div class="rounded-xl bg-gradient-brand p-8 text-center text-primary-foreground shadow-lg">
+              <h3 class="font-display text-2xl font-bold">Ready to Go Solar?</h3>
+              <p class="mt-1 text-xs sm:text-sm">Get a detailed quotation and free site assessment from Vidyut PowerTech.</p>
+              <div class="mt-5 flex flex-wrap justify-center gap-3">
+                <button type="button" id="btnOpenLeadModal" class="btn-primary bg-primary text-white border-primary hover:bg-primary/90 px-6 py-3 text-sm font-semibold">
+                  Get Free Solar Quote
+                </button>
+                <a id="btnWhatsappShare" target="_blank" rel="noopener" href="#" class="btn-secondary px-6 py-3 text-sm font-semibold">
+                  WhatsApp with Results
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-
     </main>
+
+    <!-- LEAD QUOTE MODAL -->
+    <div id="leadModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm hidden">
+      <div class="w-full max-w-md rounded-2xl bg-card p-6 shadow-2xl border border-border">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="font-display text-xl font-bold text-foreground">Get Your Free Solar Quote</h3>
+            <p class="mt-0.5 text-xs text-muted-foreground">Our expert will contact you within 24 hours.</p>
+          </div>
+          <button type="button" id="btnCloseLeadModal" class="rounded-full p-1 text-muted-foreground hover:bg-muted">✕</button>
+        </div>
+
+        <form id="leadQuoteForm" class="mt-4 space-y-4">
+          <div>
+            <label class="mb-1 block text-xs font-semibold text-foreground" for="modal-name">Full Name *</label>
+            <input id="modal-name" required placeholder="Your Full Name" class="input-field text-sm" />
+          </div>
+
+          <div>
+            <label class="mb-1 block text-xs font-semibold text-foreground" for="modal-phone">Phone Number *</label>
+            <input id="modal-phone" type="tel" pattern="^[0-9]{10}$" maxlength="10" required placeholder="10-digit phone number" class="input-field text-sm" />
+          </div>
+
+          <div>
+            <label class="mb-1 block text-xs font-semibold text-foreground" for="modal-email">Email (Optional)</label>
+            <input id="modal-email" type="email" placeholder="you@example.com" class="input-field text-sm" />
+          </div>
+
+          <div>
+            <span class="mb-1 block text-xs font-semibold text-foreground">Preferred Contact Method</span>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-border p-2 text-xs font-medium text-foreground hover:bg-muted">
+                <input type="radio" name="modalContactMethod" value="whatsapp" checked class="accent-primary" />
+                WhatsApp
+              </label>
+              <label class="flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-border p-2 text-xs font-medium text-foreground hover:bg-muted">
+                <input type="radio" name="modalContactMethod" value="call" class="accent-primary" />
+                Call
+              </label>
+              <label class="flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-border p-2 text-xs font-medium text-foreground hover:bg-muted">
+                <input type="radio" name="modalContactMethod" value="email" class="accent-primary" />
+                Email
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" id="btnSubmitLead" class="btn-primary w-full py-3 text-sm font-semibold">
+            Submit Quote Request
+          </button>
+          <p id="leadModalStatus" class="text-xs text-center"></p>
+        </form>
+      </div>
+    </div>
 
     <div id="footer-root"></div>
     <div id="whatsapp-root"></div>
+
     <script src="/js/auth-client.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/calculator.js"></script>
