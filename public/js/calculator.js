@@ -253,7 +253,6 @@ function updateCalculatorResultsUI(output) {
   document.querySelector('#resGrossCost').textContent = formatINR(financial.grossCost);
   document.querySelector('#resSubsidy').textContent = financial.subsidyAmount > 0 ? `-${formatINR(financial.subsidyAmount)}` : '₹0';
   document.querySelector('#resNetInvestment').textContent = formatINR(financial.netInvestment);
-  document.querySelector('#resEmi').textContent = `${formatINR(financial.emiMonthly)}/month`;
   document.querySelector('#resPayback').textContent = `${financial.paybackYears} years`;
 
   // 25-Year Savings Chart

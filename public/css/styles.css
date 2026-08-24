@@ -152,6 +152,20 @@ h3 .step-number {
   border-color: #0B255A !important;
 }
 
+.bg-primary .cta-action-button,
+.bg-primary .cta-action-button:hover,
+.bg-primary .cta-action-button:focus {
+  background-color: #ffffff !important;
+  color: #0B255A !important;
+  border-color: #0B255A !important;
+}
+
+.bg-primary .cta-action-label {
+  color: #0B255A !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 .service-call-now {
   display: inline-flex;
   align-items: center;
