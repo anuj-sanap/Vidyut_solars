@@ -166,6 +166,14 @@ h3 .step-number {
   visibility: visible !important;
 }
 
+.bg-primary .cta-whatsapp-button,
+.bg-primary .cta-whatsapp-button:hover,
+.bg-primary .cta-whatsapp-button:focus {
+  background-color: #FFD23F !important;
+  border-color: #FFD23F !important;
+  color: #0B255A !important;
+}
+
 .service-call-now {
   display: inline-flex;
   align-items: center;
