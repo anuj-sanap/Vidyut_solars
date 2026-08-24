@@ -115,32 +115,32 @@ const TARIFFS = [
 ];
 
 const SOLAR_PACKAGES = [
-  { id: 'pkg-1kw', systemKw: 1, panelWattage: 550, panelCount: 2, inverterCapacityKw: 1, estimatedRoofAreaSqft: 70, basePrice: 65000, installationCost: 8000, structureCost: 5000, warrantyYears: 10, active: true },
-  { id: 'pkg-2kw', systemKw: 2, panelWattage: 550, panelCount: 4, inverterCapacityKw: 2, estimatedRoofAreaSqft: 140, basePrice: 110000, installationCost: 12000, structureCost: 8000, warrantyYears: 10, active: true },
-  { id: 'pkg-3kw', systemKw: 3, panelWattage: 550, panelCount: 6, inverterCapacityKw: 3, estimatedRoofAreaSqft: 210, basePrice: 155000, installationCost: 15000, structureCost: 11000, warrantyYears: 10, active: true },
-  { id: 'pkg-4kw', systemKw: 4, panelWattage: 550, panelCount: 8, inverterCapacityKw: 4, estimatedRoofAreaSqft: 280, basePrice: 198000, installationCost: 18000, structureCost: 14000, warrantyYears: 10, active: true },
-  { id: 'pkg-5kw', systemKw: 5, panelWattage: 550, panelCount: 10, inverterCapacityKw: 5, estimatedRoofAreaSqft: 350, basePrice: 240000, installationCost: 21000, structureCost: 17000, warrantyYears: 10, active: true },
-  { id: 'pkg-6kw', systemKw: 6, panelWattage: 550, panelCount: 12, inverterCapacityKw: 6, estimatedRoofAreaSqft: 420, basePrice: 282000, installationCost: 24000, structureCost: 20000, warrantyYears: 10, active: true },
-  { id: 'pkg-7kw', systemKw: 7, panelWattage: 550, panelCount: 13, inverterCapacityKw: 7, estimatedRoofAreaSqft: 490, basePrice: 325000, installationCost: 27000, structureCost: 23000, warrantyYears: 10, active: true },
-  { id: 'pkg-8kw', systemKw: 8, panelWattage: 550, panelCount: 15, inverterCapacityKw: 8, estimatedRoofAreaSqft: 560, basePrice: 368000, installationCost: 30000, structureCost: 26000, warrantyYears: 10, active: true },
-  { id: 'pkg-9kw', systemKw: 9, panelWattage: 550, panelCount: 17, inverterCapacityKw: 9, estimatedRoofAreaSqft: 630, basePrice: 410000, installationCost: 33000, structureCost: 29000, warrantyYears: 10, active: true },
-  { id: 'pkg-10kw', systemKw: 10, panelWattage: 550, panelCount: 19, inverterCapacityKw: 10, estimatedRoofAreaSqft: 700, basePrice: 452000, installationCost: 36000, structureCost: 32000, warrantyYears: 10, active: true },
-  { id: 'pkg-11kw', systemKw: 11, panelWattage: 550, panelCount: 20, inverterCapacityKw: 11, estimatedRoofAreaSqft: 770, basePrice: 495000, installationCost: 39000, structureCost: 35000, warrantyYears: 10, active: true },
-  { id: 'pkg-12kw', systemKw: 12, panelWattage: 550, panelCount: 22, inverterCapacityKw: 12, estimatedRoofAreaSqft: 840, basePrice: 535000, installationCost: 42000, structureCost: 38000, warrantyYears: 10, active: true },
-  { id: 'pkg-13kw', systemKw: 13, panelWattage: 550, panelCount: 24, inverterCapacityKw: 13, estimatedRoofAreaSqft: 910, basePrice: 575000, installationCost: 45000, structureCost: 41000, warrantyYears: 10, active: true },
-  { id: 'pkg-14kw', systemKw: 14, panelWattage: 550, panelCount: 26, inverterCapacityKw: 14, estimatedRoofAreaSqft: 980, basePrice: 615000, installationCost: 48000, structureCost: 44000, warrantyYears: 10, active: true },
-  { id: 'pkg-15kw', systemKw: 15, panelWattage: 550, panelCount: 28, inverterCapacityKw: 15, estimatedRoofAreaSqft: 1050, basePrice: 655000, installationCost: 51000, structureCost: 47000, warrantyYears: 10, active: true },
-  { id: 'pkg-16kw', systemKw: 16, panelWattage: 550, panelCount: 30, inverterCapacityKw: 16, estimatedRoofAreaSqft: 1120, basePrice: 695000, installationCost: 54000, structureCost: 50000, warrantyYears: 10, active: true },
-  { id: 'pkg-17kw', systemKw: 17, panelWattage: 550, panelCount: 31, inverterCapacityKw: 17, estimatedRoofAreaSqft: 1190, basePrice: 735000, installationCost: 57000, structureCost: 53000, warrantyYears: 10, active: true },
-  { id: 'pkg-18kw', systemKw: 18, panelWattage: 550, panelCount: 33, inverterCapacityKw: 18, estimatedRoofAreaSqft: 1260, basePrice: 775000, installationCost: 60000, structureCost: 56000, warrantyYears: 10, active: true },
-  { id: 'pkg-19kw', systemKw: 19, panelWattage: 550, panelCount: 35, inverterCapacityKw: 19, estimatedRoofAreaSqft: 1330, basePrice: 815000, installationCost: 63000, structureCost: 59000, warrantyYears: 10, active: true },
-  { id: 'pkg-20kw', systemKw: 20, panelWattage: 550, panelCount: 37, inverterCapacityKw: 20, estimatedRoofAreaSqft: 1400, basePrice: 855000, installationCost: 66000, structureCost: 62000, warrantyYears: 10, active: true },
+  { id: 'pkg-1kw', systemKw: 1, panelWattage: 550, panelCount: 2, inverterCapacityKw: 1, estimatedRoofAreaSqft: 80, basePrice: 80000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-2kw', systemKw: 2, panelWattage: 550, panelCount: 4, inverterCapacityKw: 2, estimatedRoofAreaSqft: 160, basePrice: 150000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-3kw', systemKw: 3, panelWattage: 550, panelCount: 6, inverterCapacityKw: 3, estimatedRoofAreaSqft: 240, basePrice: 220000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-4kw', systemKw: 4, panelWattage: 550, panelCount: 8, inverterCapacityKw: 4, estimatedRoofAreaSqft: 320, basePrice: 250000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-5kw', systemKw: 5, panelWattage: 550, panelCount: 10, inverterCapacityKw: 5, estimatedRoofAreaSqft: 400, basePrice: 290000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-6kw', systemKw: 6, panelWattage: 550, panelCount: 11, inverterCapacityKw: 6, estimatedRoofAreaSqft: 480, basePrice: 330000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-7kw', systemKw: 7, panelWattage: 550, panelCount: 13, inverterCapacityKw: 7, estimatedRoofAreaSqft: 560, basePrice: 370000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-8kw', systemKw: 8, panelWattage: 550, panelCount: 15, inverterCapacityKw: 8, estimatedRoofAreaSqft: 640, basePrice: 410000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-9kw', systemKw: 9, panelWattage: 550, panelCount: 17, inverterCapacityKw: 9, estimatedRoofAreaSqft: 720, basePrice: 450000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-10kw', systemKw: 10, panelWattage: 550, panelCount: 19, inverterCapacityKw: 10, estimatedRoofAreaSqft: 800, basePrice: 490000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-11kw', systemKw: 11, panelWattage: 550, panelCount: 20, inverterCapacityKw: 11, estimatedRoofAreaSqft: 880, basePrice: 530000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-12kw', systemKw: 12, panelWattage: 550, panelCount: 22, inverterCapacityKw: 12, estimatedRoofAreaSqft: 960, basePrice: 570000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-13kw', systemKw: 13, panelWattage: 550, panelCount: 24, inverterCapacityKw: 13, estimatedRoofAreaSqft: 1040, basePrice: 610000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-14kw', systemKw: 14, panelWattage: 550, panelCount: 26, inverterCapacityKw: 14, estimatedRoofAreaSqft: 1120, basePrice: 650000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-15kw', systemKw: 15, panelWattage: 550, panelCount: 28, inverterCapacityKw: 15, estimatedRoofAreaSqft: 1200, basePrice: 690000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-16kw', systemKw: 16, panelWattage: 550, panelCount: 30, inverterCapacityKw: 16, estimatedRoofAreaSqft: 1280, basePrice: 730000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-17kw', systemKw: 17, panelWattage: 550, panelCount: 31, inverterCapacityKw: 17, estimatedRoofAreaSqft: 1360, basePrice: 770000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-18kw', systemKw: 18, panelWattage: 550, panelCount: 33, inverterCapacityKw: 18, estimatedRoofAreaSqft: 1440, basePrice: 810000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-19kw', systemKw: 19, panelWattage: 550, panelCount: 35, inverterCapacityKw: 19, estimatedRoofAreaSqft: 1520, basePrice: 850000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
+  { id: 'pkg-20kw', systemKw: 20, panelWattage: 550, panelCount: 37, inverterCapacityKw: 20, estimatedRoofAreaSqft: 1600, basePrice: 890000, installationCost: 0, structureCost: 0, warrantyYears: 10, active: true },
 ];
 
 const SUBSIDY_RULES = [
-  { id: 'sub-res-1', customerType: 'residential', minKw: 0, maxKw: 2, ratePerKw: 30000, maximumSubsidy: 60000, effectiveFrom: '2024-02-01', effectiveTo: null, active: true },
-  { id: 'sub-res-2', customerType: 'residential', minKw: 2.01, maxKw: 3, ratePerKw: 18000, maximumSubsidy: 78000, effectiveFrom: '2024-02-01', effectiveTo: null, active: true },
-  { id: 'sub-res-3', customerType: 'residential', minKw: 3.01, maxKw: 999, ratePerKw: 0, maximumSubsidy: 78000, effectiveFrom: '2024-02-01', effectiveTo: null, active: true },
+  { id: 'sub-res-1', customerType: 'residential', minKw: 0, maxKw: 1, subsidyAmount: 30000, effectiveFrom: '2024-02-01', effectiveTo: null, active: true },
+  { id: 'sub-res-2', customerType: 'residential', minKw: 1.01, maxKw: 2, subsidyAmount: 60000, effectiveFrom: '2024-02-01', effectiveTo: null, active: true },
+  { id: 'sub-res-3', customerType: 'residential', minKw: 2.01, maxKw: 999, subsidyAmount: 78000, effectiveFrom: '2024-02-01', effectiveTo: null, active: true },
 ];
 
 const FINANCE_CONFIG = {
@@ -151,10 +151,12 @@ const FINANCE_CONFIG = {
 };
 
 const CALCULATOR_ASSUMPTIONS = {
+  dailyGenerationPerKw: 4,
+  electricityTariffPerKwh: 8,
   annualDegradationRate: 0.007,
   annualTariffGrowthRate: 0.03,
   projectLifeYears: 25,
-  gridEmissionFactorKgPerKwh: 0.716,
+  gridEmissionFactorKgPerKwh: 0.7,
   treesEquivalentKgPerTree: 21,
   selfConsumptionRatio: 0.7,
   exportRateMultiplier: 0.55,

@@ -175,6 +175,10 @@ function computeSubsidy(systemKw, customerType, rules) {
   );
   if (!applicable) return 0;
 
+  if (Number.isFinite(Number(applicable.subsidyAmount))) {
+    return Number(applicable.subsidyAmount);
+  }
+
   const raw = systemKw * applicable.ratePerKw;
   return Math.min(raw, applicable.maximumSubsidy);
 }
@@ -306,7 +310,10 @@ async function calculateSolarEstimate(input) {
   const selectedPackage = selectPackage(requiredKwRaw, allPackages, input.systemSize || input.selectedSystemSize);
 
   const recommendedKw = selectedPackage.systemKw;
-  const annualGenerationKwh = recommendedKw * location.generationFactor;
+  const annualGenerationPerKw = Number(assumptions.dailyGenerationPerKw) > 0
+    ? Number(assumptions.dailyGenerationPerKw) * 365
+    : location.generationFactor;
+  const annualGenerationKwh = recommendedKw * annualGenerationPerKw;
   const monthlyGenerationKwh = annualGenerationKwh / 12;
 
   // 4. Roof area check
@@ -322,10 +329,7 @@ async function calculateSolarEstimate(input) {
   }
 
   // 5. Savings
-  const selfConsumedShare = assumptions.selfConsumptionRatio;
-  const exportedShare = 1 - selfConsumedShare;
-  const blendedRate =
-    effectiveRatePerUnit * selfConsumedShare + effectiveRatePerUnit * assumptions.exportRateMultiplier * exportedShare;
+  const blendedRate = Number(assumptions.electricityTariffPerKwh) || effectiveRatePerUnit;
 
   const annualSavings = annualGenerationKwh * blendedRate;
   const monthlySavings = annualSavings / 12;
@@ -348,7 +352,8 @@ async function calculateSolarEstimate(input) {
     projectLifeYears: assumptions.projectLifeYears,
   });
 
-  const paybackYears = computePaybackYears(netInvestment, yearlyProjection);
+  // The supplied calculator uses simple payback: listed system cost ÷ first-year savings.
+  const paybackYears = annualSavings > 0 ? grossCost / annualSavings : 0;
   const twentyFiveYearSavings = yearlyProjection[yearlyProjection.length - 1]?.cumulativeSavings ?? 0;
 
   // 9. Environmental
