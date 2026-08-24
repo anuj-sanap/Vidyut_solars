@@ -588,6 +588,13 @@ footer span {
 }
 
 @media (max-width: 768px) {
+  .step-card .step-description {
+    max-height: none;
+    margin-top: 0.5rem;
+    opacity: 1;
+    transform: none;
+  }
+
   .customer-feedback-wrap {
     padding-left: 0;
     padding-right: 0;
@@ -622,6 +629,12 @@ footer span {
     color: #d2edff !important;
     font-size: 0.8rem;
     font-weight: 700;
+  }
+
+  .quality-strip {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 32px;
   }
 }
 
