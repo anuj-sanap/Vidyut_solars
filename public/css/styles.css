@@ -2,6 +2,50 @@
   overflow: hidden;
 }
 
+/* Fix number alignment and font across all pages:
+   Only the number value font is changed to sans-serif (Manrope) with lining numerals so numbers match text level line */
+*, ::before, ::after {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+}
+
+.step-number,
+.number-val,
+.num-val,
+[data-number] {
+  font-family: var(--font-sans), "Manrope", ui-sans-serif, system-ui, sans-serif !important;
+  font-variant-numeric: lining-nums tabular-nums !important;
+  font-feature-settings: "lnum" 1, "tnum" 1 !important;
+  vertical-align: baseline !important;
+  display: inline-block !important;
+  margin-right: 0.15rem;
+  line-height: inherit;
+  font-weight: 800 !important;
+}
+
+.font-display .step-number,
+.font-display .number-val,
+h1 .number-val,
+h2 .number-val,
+h3 .number-val,
+h1 .step-number,
+h2 .step-number,
+h3 .step-number {
+  font-family: var(--font-sans), "Manrope", ui-sans-serif, system-ui, sans-serif !important;
+  font-variant-numeric: lining-nums tabular-nums !important;
+  font-feature-settings: "lnum" 1, "tnum" 1 !important;
+  vertical-align: baseline !important;
+  font-weight: 800 !important;
+}
+
+.step-card h3,
+.theme-card h3,
+.theme-card-shadow h3 {
+  line-height: 1.4;
+  display: flex;
+  align-items: baseline;
+}
+
 .step-card .step-description {
   max-height: 0;
   overflow: hidden;
@@ -275,11 +319,11 @@ footer span {
 }
 
 .feedback-title {
-  margin: 36px 0 0;
+  margin: 28px 0 0;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(2.2rem, 4.5vw, 4rem);
-  line-height: 1.05;
-  font-weight: 900;
+  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+  line-height: 1.1;
+  font-weight: 800;
   color: #ffffff !important;
 }
 
@@ -288,18 +332,18 @@ footer span {
 }
 
 .feedback-divider {
-  width: 120px;
-  height: 4px;
-  margin: 24px auto 0;
+  width: 90px;
+  height: 3px;
+  margin: 18px auto 0;
   border-radius: 999px;
   background: linear-gradient(90deg, #f3bd45, #f0d27d);
 }
 
 .feedback-subtitle {
-  max-width: 780px;
-  margin: 26px auto 0;
-  font-size: clamp(1rem, 2vw, 1.36rem);
-  line-height: 1.6;
+  max-width: 680px;
+  margin: 18px auto 0;
+  font-size: clamp(0.875rem, 1.4vw, 1.1rem);
+  line-height: 1.5;
   color: #d2edff;
 }
 

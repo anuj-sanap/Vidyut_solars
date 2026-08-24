@@ -131,6 +131,12 @@ async function notifyVisit() {
   }
 }
 
+function alignNumbersWithText() {
+  document.querySelectorAll(".step-number, .num, [data-number]").forEach((el) => {
+    el.classList.add("number-val");
+  });
+}
+
 async function bootLayout() {
   await loadComponent("#navbar-root", "/components/navbar.html");
   await loadComponent("#footer-root", "/components/footer.html");
@@ -139,6 +145,7 @@ async function bootLayout() {
   highlightActiveNav();
   setupRevealAnimations();
   setupAuthNav();
+  alignNumbersWithText();
   setYear();
   notifyVisit();
 }

@@ -50,6 +50,24 @@
     letter-spacing: -0.01em;
     font-weight: 400;
   }
+
+  *, ::before, ::after {
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+
+  .step-number,
+  .number-val,
+  .num-val,
+  [data-number] {
+    font-family: var(--font-sans), "Manrope", ui-sans-serif, system-ui, sans-serif !important;
+    font-variant-numeric: lining-nums tabular-nums !important;
+    font-feature-settings: "lnum" 1, "tnum" 1 !important;
+    vertical-align: baseline !important;
+    display: inline-block !important;
+    line-height: inherit;
+    font-weight: 800 !important;
+  }
 }
 
 @layer components {
