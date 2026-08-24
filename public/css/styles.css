@@ -582,3 +582,46 @@ footer span {
   transition: opacity 0.25s ease;
 }
 
+/* Keep customer reviews accessible on small touch screens. */
+.feedback-swipe-hint {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .customer-feedback-wrap {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .customer-feedback-wrap > :not(.feedback-cards) {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+
+  .feedback-cards {
+    display: flex;
+    gap: 16px;
+    margin-top: 34px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 24px;
+    padding: 0 24px 12px;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+  }
+
+  .feedback-card {
+    flex: 0 0 min(82vw, 320px);
+    scroll-snap-align: start;
+  }
+
+  .feedback-swipe-hint {
+    display: block;
+    margin-top: 14px !important;
+    color: #d2edff !important;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+}
+
