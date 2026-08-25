@@ -643,13 +643,6 @@ footer span {
 }
 
 @media (max-width: 768px) {
-  .step-card .step-description {
-    max-height: none;
-    margin-top: 0.5rem;
-    opacity: 1;
-    transform: none;
-  }
-
   .customer-feedback-wrap {
     padding-left: 0;
     padding-right: 0;
