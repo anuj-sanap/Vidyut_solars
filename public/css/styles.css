@@ -1,5 +1,10 @@
 .step-card {
   overflow: hidden;
+  cursor: pointer;
+}
+
+.step-card:hover {
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 /* Fix number alignment and font across all pages:
@@ -55,9 +60,7 @@ h3 .step-number {
   margin-top: 0;
 }
 
-.step-card:hover .step-description,
-.step-card:focus-within .step-description,
-.step-card:focus .step-description {
+.step-card.active .step-description {
   max-height: 180px;
   opacity: 1;
   transform: translateY(0);

@@ -137,6 +137,22 @@ function alignNumbersWithText() {
   });
 }
 
+function setupStepCards() {
+  const stepCards = document.querySelectorAll(".step-card");
+  stepCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      // Close all other cards
+      stepCards.forEach((otherCard) => {
+        if (otherCard !== card) {
+          otherCard.classList.remove("active");
+        }
+      });
+      // Toggle current card
+      card.classList.toggle("active");
+    });
+  });
+}
+
 async function bootLayout() {
   await loadComponent("#navbar-root", "/components/navbar.html");
   await loadComponent("#footer-root", "/components/footer.html");
@@ -146,6 +162,7 @@ async function bootLayout() {
   setupRevealAnimations();
   setupAuthNav();
   alignNumbersWithText();
+  setupStepCards();
   setYear();
   notifyVisit();
 }
