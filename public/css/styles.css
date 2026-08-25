@@ -52,19 +52,19 @@ h3 .step-number {
 }
 
 .step-card .step-description {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(-4px);
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  transform: translateY(-4px) !important;
   transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease, margin 0.25s ease;
-  margin-top: 0;
+  margin-top: 0 !important;
 }
 
 .step-card.active .step-description {
-  max-height: 180px;
-  opacity: 1;
-  transform: translateY(0);
-  margin-top: 0.5rem;
+  max-height: 180px !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  margin-top: 0.5rem !important;
 }
 
 .hero-bg {
