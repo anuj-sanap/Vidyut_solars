@@ -18,8 +18,8 @@ const PORT = process.env.PORT || 3000;
 const ownerPanelKey = process.env.OWNER_PANEL_KEY || "";
 const mongoUri = process.env.MONGODB_URI || "";
 const jwtSecret = process.env.JWT_SECRET || crypto.randomBytes(32).toString("hex");
-const adminEmail = normalizeEmail(process.env.ADMIN_EMAIL || "admin@vidyutsolar.in");
-const adminPassword = process.env.ADMIN_PASSWORD || "VidyutAdmin@2026";
+const adminEmail = normalizeEmail(process.env.ADMIN_EMAIL || "");
+const adminPassword = process.env.ADMIN_PASSWORD || "";
 const uploadsDir = path.join(__dirname, "uploads");
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
   .split(",")

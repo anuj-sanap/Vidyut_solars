@@ -1,3 +1,18 @@
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 .step-card {
   overflow: hidden;
   cursor: pointer;
@@ -254,6 +269,8 @@ footer span {
 
 @media (max-width: 768px) {
   .hero-bg {
+    min-height: 0;
+    background-position: 62% center;
     border-bottom-left-radius: 1.25rem;
     border-bottom-right-radius: 1.25rem;
   }
