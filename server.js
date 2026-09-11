@@ -1318,13 +1318,17 @@ app.get("/api/health", (_, res) => {
 });
 
 async function startServer() {
-  if (!mongoUri) {
-    throw new Error("MONGODB_URI is required. Add it to your .env file.");
+  if (mongoUri) {
+    await mongoose.connect(mongoUri);
+  } else {
+    console.warn("MONGODB_URI is not set. Starting with database features disabled.");
   }
-  await mongoose.connect(mongoUri);
+
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
-    console.log(`Database connected.`);
+    console.log(
+      mongoUri ? "Database connected." : "Database disconnected; configure MONGODB_URI to enable persistence.",
+    );
     if (hasCloudinaryConfig) {
       console.log("Upload storage: Cloudinary");
     } else {
