@@ -1317,27 +1317,46 @@ app.get("/api/health", (_, res) => {
   });
 });
 
-async function startServer() {
-  if (mongoUri) {
-    await mongoose.connect(mongoUri);
-  } else {
+let databaseConnectionPromise;
+
+async function connectDatabase() {
+  if (!mongoUri) {
     console.warn("MONGODB_URI is not set. Starting with database features disabled.");
+    return;
   }
 
-  app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-    console.log(
-      mongoUri ? "Database connected." : "Database disconnected; configure MONGODB_URI to enable persistence.",
-    );
-    if (hasCloudinaryConfig) {
-      console.log("Upload storage: Cloudinary");
-    } else {
-      console.log("Upload storage: local uploads folder (Cloudinary env vars not set)");
-    }
-  });
+  if (mongoose.connection.readyState === 1) return;
+  if (!databaseConnectionPromise) {
+    databaseConnectionPromise = mongoose.connect(mongoUri).catch((error) => {
+      databaseConnectionPromise = undefined;
+      throw error;
+    });
+  }
+
+  await databaseConnectionPromise;
 }
 
-startServer().catch((error) => {
-  console.error("Failed to start server:", error.message);
-  process.exit(1);
-});
+module.exports = { app, connectDatabase };
+
+if (require.main === module) {
+  connectDatabase()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server running at http://localhost:${PORT}`);
+        console.log(
+          mongoUri
+            ? "Database connected."
+            : "Database disconnected; configure MONGODB_URI to enable persistence.",
+        );
+        console.log(
+          hasCloudinaryConfig
+            ? "Upload storage: Cloudinary"
+            : "Upload storage: local uploads folder (Cloudinary env vars not set)",
+        );
+      });
+    })
+    .catch((error) => {
+      console.error("Failed to start server:", error.message);
+      process.exitCode = 1;
+    });
+}
