@@ -30,6 +30,8 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
     "https://vidyut-solar-electricals.onrender.com",
     "https://vidyut-solar-electricals-1.onrender.com",
     "http://localhost:3000",
+    "https://vidyutpowertech.com",
+    "https://www.vidyutpowertech.com",
     "http://localhost",
   ])
   .filter(Boolean);
