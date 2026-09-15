@@ -13,7 +13,7 @@ services:
       - key: PORT
         value: 10000
       - key: ALLOWED_ORIGINS
-        value: https://vidyutsolar.in
+        value: https://vidyutpowertech.com,https://www.vidyutpowertech.com,https://vidyutsolar.in,https://www.vidyutsolar.in
       - key: JWT_SECRET
         sync: false
       - key: ADMIN_EMAIL

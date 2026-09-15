@@ -116,7 +116,7 @@ async function notifyVisit() {
       localStorage.setItem("visitId", visitId);
     }
 
-    await fetch("/api/notify-visit", {
+    const response = await fetch("/api/notify-visit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -125,6 +125,7 @@ async function notifyVisit() {
       }),
     });
 
+    if (!response.ok) return;
     sessionStorage.setItem(key, "1");
   } catch (_) {
     // Keep UI silent if notification endpoint is unreachable.

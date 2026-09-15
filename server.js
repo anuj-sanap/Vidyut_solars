@@ -33,6 +33,8 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
     "https://vidyutpowertech.com",
     "https://www.vidyutpowertech.com",
     "http://localhost",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
   ])
   .filter(Boolean);
 
@@ -102,10 +104,10 @@ function validSmtpHost(host) {
 }
 
 const hasMailConfig =
-  validSmtpHost(process.env.SMTP_HOST || "") &&
-  Boolean(process.env.SMTP_PORT) &&
-  Boolean(process.env.SMTP_USER) &&
-  Boolean(process.env.SMTP_PASS);
+  validSmtpHost(String(process.env.SMTP_HOST || "").trim()) &&
+  Boolean(String(process.env.SMTP_PORT || "").trim()) &&
+  Boolean(String(process.env.SMTP_USER || "").trim()) &&
+  Boolean(String(process.env.SMTP_PASS || "").trim());
 
 if (process.env.SMTP_HOST && !validSmtpHost(process.env.SMTP_HOST)) {
   console.warn("SMTP_HOST must be a server host like smtp.gmail.com. Visitor email alerts are disabled.");
@@ -113,12 +115,12 @@ if (process.env.SMTP_HOST && !validSmtpHost(process.env.SMTP_HOST)) {
 
 const transporter = hasMailConfig
   ? nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
-      secure: process.env.SMTP_SECURE === "true",
+      host: String(process.env.SMTP_HOST).trim(),
+      port: Number(String(process.env.SMTP_PORT).trim()),
+      secure: String(process.env.SMTP_SECURE || "").trim().toLowerCase() === "true",
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: String(process.env.SMTP_USER).trim(),
+        pass: String(process.env.SMTP_PASS).trim(),
       },
     })
   : null;
@@ -960,7 +962,7 @@ app.post("/api/notify-visit", visitRateLimit, async (req, res) => {
 
     try {
       const result = await sendVisitorEmail({ page, ip, userAgent, visitId });
-      return res.json({ success: true, ...result });
+      return res.json({ success: result.sent === true, ...result });
     } catch (emailError) {
       logServerError("notify-visit-email", emailError);
       return res.json({
@@ -1279,6 +1281,12 @@ app.delete("/api/admin/projects/:id", adminRateLimit, requireAuth, requireAdmin,
 });
 
 app.use((error, _, res, next) => {
+  if (error.message === "Origin is not allowed by CORS.") {
+    return res.status(403).json({
+      success: false,
+      message: "This website origin is not allowed to use the API.",
+    });
+  }
   if (error instanceof multer.MulterError) {
     if (error.code === "LIMIT_FILE_SIZE") {
       return res.status(400).json({
